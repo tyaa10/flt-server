@@ -1,0 +1,23 @@
+# ===============================
+# EMBEDDED WEB SERVER
+# ===============================
+server:
+  port: 8090
+  servlet:
+    context-path: /lang-trainer
+# ===============================
+# Relational Database - Postgres
+# ===============================
+spring:
+  config:
+    import: optional:file:local.env[.properties]
+  datasource:
+    url: ${DB_URL}
+    username: ${PG_USER}
+    password: ${PG_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect

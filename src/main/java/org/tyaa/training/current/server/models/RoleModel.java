@@ -7,7 +7,7 @@ public class RoleModel {
     /**
      * Локально уникальный идентификатор
      * */
-    public int id;
+    public Long id;
     /**
      * Название роли
      * */
