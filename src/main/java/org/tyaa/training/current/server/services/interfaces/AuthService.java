@@ -18,11 +18,8 @@ public class AuthService implements IAuthService {
     }
     @Override
     public List<RoleModel> getRoles() {
-        return roleRepository.findAll().stream().map(roleEntity -> {
-            RoleModel roleModel = new RoleModel();
-            roleModel.id = roleEntity.getId();
-            roleModel.name = roleEntity.getName();
-            return roleModel;
-        }).toList();
+        return roleRepository.findAll().stream()
+                .map(roleEntity -> RoleModel.builder().id(roleEntity.getId()).name(roleEntity.getName()).build())
+                .toList();
     }
 }

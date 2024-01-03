@@ -27,7 +27,6 @@ public class AuthController {
      * */
     @GetMapping("/admin/roles")
     public ResponseEntity<List<RoleModel>> getRoles () {
-        List<RoleModel> roleModels = authService.getRoles();
-        return new ResponseEntity<>(roleModels, HttpStatus.OK);
+        return new ResponseEntity<>(authService.getRoles(), HttpStatus.OK);
     }
 }
