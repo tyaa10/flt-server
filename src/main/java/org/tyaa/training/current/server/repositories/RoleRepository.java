@@ -12,6 +12,11 @@ import org.tyaa.training.current.server.entities.RoleEntity;
  * */
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
+    /**
+     * Заказ для каркаса сгенерировать реализацию метода,
+     * вызов которого приведёт к удалению всех строк в таблице "Роли"
+     * и к сбросу счётчика в колонке идентификаторов
+     * */
     @Modifying
     @Transactional
     @Query(value = "TRUNCATE TABLE Roles RESTART IDENTITY", nativeQuery = true)

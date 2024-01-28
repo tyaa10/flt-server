@@ -30,8 +30,8 @@ public class ServerApplication {
 	public CommandLineRunner initData (RoleRepository roleRepository) {
 		return args -> {
 			roleRepository.truncateTable();
-			roleRepository.save(RoleEntity.builder().name("ROLE_ADMIN").build());
-			roleRepository.save(RoleEntity.builder().name("ROLE_CUSTOMER").build());
+			roleRepository.save(RoleEntity.builder().name(roles.get(0)).build());
+			roleRepository.save(RoleEntity.builder().name(roles.get(1)).build());
 		};
 	}
 }

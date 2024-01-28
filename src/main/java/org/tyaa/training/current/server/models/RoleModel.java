@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * Модель роли пользователя
+ * Имя класса выбирается произвольно
  * */
 @Data
 @NoArgsConstructor

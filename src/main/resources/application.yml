@@ -1,5 +1,7 @@
 # ===============================
 # EMBEDDED WEB SERVER
+# Custom names:
+# lang-trainer - основа web-адреса приложения
 # ===============================
 server:
   port: 8090
@@ -7,6 +9,11 @@ server:
     context-path: /lang-trainer
 # ===============================
 # Relational Database - Postgres
+# Custom names:
+# DB_URL - путь к базе данных
+# PG_USER - пользователь базы данных
+# PG_PASSWORD - пароль базы данных
+# local.env - имя файла с "секретами"
 # ===============================
 spring:
   config:
@@ -26,4 +33,4 @@ spring:
 # ===============================
 custom:
   init-data:
-    roles: admin, customer
+    roles: ROLE_ADMIN, ROLE_CUSTOMER
