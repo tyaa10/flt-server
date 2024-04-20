@@ -7,23 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * Модель роли пользователя
- * Имя класса выбирается произвольно
- * */
 @Data
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RoleModel {
-    /**
-     * Локально уникальный идентификатор
-     * */
-    public Long id;
-    /**
-     * Название роли
-     * */
-    public String name;
+public class ResponseModel {
+    public static final String SUCCESS_STATUS = "success";
+    public static final String FAIL_STATUS = "fail";
+    private String status;
+    private String message;
+    private Object data;
 }

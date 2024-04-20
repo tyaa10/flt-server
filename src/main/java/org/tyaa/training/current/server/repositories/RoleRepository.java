@@ -21,4 +21,6 @@ public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
     @Transactional
     @Query(value = "TRUNCATE TABLE Roles RESTART IDENTITY", nativeQuery = true)
     void truncateTable();
+
+    RoleEntity findRoleByName(String name);
 }
