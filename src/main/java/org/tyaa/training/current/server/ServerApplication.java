@@ -46,28 +46,28 @@ public class ServerApplication {
 			userRepository.save(
 					UserEntity.builder()
 							.name("admin")
-							.password(passwordEncoder.encode("AdminPassword1"))
+							.password(passwordEncoder.encode("AdminPassword1%"))
 							.role(adminRole)
 							.build()
 			);
 			userRepository.save(
 					UserEntity.builder()
 							.name("one")
-							.password(passwordEncoder.encode("UserPassword1"))
+							.password(passwordEncoder.encode("UserPassword1%"))
 							.role(userRole)
 							.build()
 			);
 			userRepository.save(
 					UserEntity.builder()
 							.name("two")
-							.password(passwordEncoder.encode("UserPassword2"))
+							.password(passwordEncoder.encode("UserPassword2%"))
 							.role(userRole)
 							.build()
 			);
 			userRepository.save(
 					UserEntity.builder()
 							.name("three")
-							.password(passwordEncoder.encode("UserPassword3"))
+							.password(passwordEncoder.encode("UserPassword3%"))
 							.role(userRole)
 							.build()
 			);

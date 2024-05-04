@@ -3,6 +3,7 @@ package org.tyaa.training.current.server.controllers;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -70,7 +71,7 @@ public class AuthController {
 
     @Operation(summary = "Create a new user")
     @PostMapping("/users")
-    public ResponseEntity<ResponseModel> createUser(@RequestBody UserModel userModel) {
+    public ResponseEntity<ResponseModel> createUser(@Valid @RequestBody UserModel userModel) {
         ResponseModel responseModel =
                 authService.createUser(userModel);
         return new ResponseEntity<>(
