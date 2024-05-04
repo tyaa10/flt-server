@@ -11,6 +11,9 @@ import java.util.List;
  * Интерфейс службы аутентификации
  * */
 public interface IAuthService {
+    public enum ROLES {
+        ADMIN, CUSTOMER
+    }
     ResponseModel getRoles();
     ResponseModel createRole(RoleModel roleModel);
     ResponseModel getRoleUsers(Long roleId);

@@ -10,6 +10,7 @@ import org.tyaa.training.current.server.entities.RoleEntity;
 import org.tyaa.training.current.server.entities.UserEntity;
 import org.tyaa.training.current.server.repositories.RoleRepository;
 import org.tyaa.training.current.server.repositories.UserRepository;
+import org.tyaa.training.current.server.services.interfaces.IAuthService;
 
 import java.util.List;
 
@@ -40,8 +41,8 @@ public class ServerApplication {
 				roleRepository.save(RoleEntity.builder().name(roleName).build());
 			}
 			/* Обеспечение наличия в БД нескольких фейковых пользователей для отладки и тестирования приложения */
-			RoleEntity adminRole = roleRepository.findRoleByName(roles.get(0));
-			RoleEntity userRole = roleRepository.findRoleByName(roles.get(1));
+			RoleEntity adminRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.ADMIN.ordinal()));
+			RoleEntity userRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.CUSTOMER.ordinal()));
 			userRepository.save(
 					UserEntity.builder()
 							.name("admin")

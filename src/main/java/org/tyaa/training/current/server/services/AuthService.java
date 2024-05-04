@@ -1,6 +1,7 @@
 package org.tyaa.training.current.server.services;
 
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ import java.util.stream.Collectors;
 * */
 @Service
 public class AuthService implements IAuthService {
+    @Value("${custom.init-data.roles}")
+    private List<String> roles;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -61,7 +64,7 @@ public class AuthService implements IAuthService {
                 UserEntity.builder()
                         .name(userModel.getName().trim())
                         .password(passwordEncoder.encode(userModel.getPassword()))
-                        .role(roleRepository.findRoleByName("ROLE_USER"))
+                        .role(roleRepository.findRoleByName(roles.get(IAuthService.ROLES.CUSTOMER.ordinal())))
                         .build();
         userRepository.save(user);
         return ResponseModel.builder()
@@ -107,7 +110,7 @@ public class AuthService implements IAuthService {
 
     public ResponseModel makeUserAdmin(Long id) throws Exception {
         // Получаем из БД объект роли администратора
-        RoleEntity role = roleRepository.findRoleByName("ROLE_ADMIN");
+        RoleEntity role = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.ADMIN.ordinal()));
         Optional<UserEntity> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()){
             UserEntity user = userOptional.get();
