@@ -18,7 +18,7 @@ public class RepositoriesServicesExceptionHandlerAspect {
     /**
      * Обработка исключений в репозиториях
      * */
-    @Around("execution(* org.tyaa.training.server.repositories.*.*(..))")
+    @Around("execution(* org.tyaa.training.current.server.repositories.*.*(..))")
     public Object onRepositoryMethodExecution(ProceedingJoinPoint pjp) throws Exception {
         System.out.println("onRepositoryMethodExecution");
         Object output = null;
@@ -43,7 +43,7 @@ public class RepositoriesServicesExceptionHandlerAspect {
     /**
      * Обработка исключений в службах
      * */
-    @Around("execution(* org.tyaa.training.server.services.*.*(..))")
+    @Around("execution(* org.tyaa.training.current.server.services.*.*(..))")
     public Object onServiceMethodExecution(ProceedingJoinPoint pjp) {
         System.out.println("onServiceMethodExecution");
         Object output = null;
