@@ -78,7 +78,7 @@ public class AuthController {
                 responseModel,
                 (responseModel.getMessage().toLowerCase().contains("created"))
                         ? HttpStatus.CREATED
-                        : responseModel.getMessage().contains("name")
+                        : responseModel.getMessage().contains("This name is already taken")
                         ? HttpStatus.CONFLICT
                         : HttpStatus.BAD_GATEWAY
         );

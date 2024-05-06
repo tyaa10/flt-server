@@ -1,5 +1,6 @@
 package org.tyaa.training.current.server.aspects;
 
+import java.util.Arrays;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,7 +28,7 @@ public class RepositoriesServicesExceptionHandlerAspect {
         } catch (Exception ex) {
             System.out.println("onRepositoryMethodException: " + ex.getMessage());
             // если перехвачено исключение типа "нарушение ограничения уникальности"
-            if (ex.getMessage() != null && ex.getMessage().contains("users_name_key")) {
+            if (ex.getMessage() != null && ex.getMessage().contains("_name_key")) {
                 // то вместо него выбросить стандартное исключение типа ConstraintViolationException
                 // со значением сообщения "UNIQUE_CONSTRAINT_VIOLATION"
                 System.out.println("onRepositoryMethodException handled");
@@ -58,7 +59,8 @@ public class RepositoriesServicesExceptionHandlerAspect {
             output =
                     ResponseModel.builder()
                             .status(ResponseModel.FAIL_STATUS)
-                            .message(constraintViolationMessage)
+                            .message(String.format("Invalid data - %s", constraintViolationMessage))
+							.data(Arrays.asList(constraintViolationMessage))
                             .build();
         } catch (Exception ex) {
             System.err.println("Unknown Error");
