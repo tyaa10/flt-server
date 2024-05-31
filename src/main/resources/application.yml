@@ -34,3 +34,4 @@ spring:
 custom:
   init-data:
     roles: ROLE_ADMIN, ROLE_CUSTOMER
+    levels: beginner, elementary, intermediate, upper-intermediate, advanced, proficiency

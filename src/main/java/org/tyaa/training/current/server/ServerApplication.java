@@ -6,8 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.tyaa.training.current.server.entities.LevelEntity;
 import org.tyaa.training.current.server.entities.RoleEntity;
 import org.tyaa.training.current.server.entities.UserEntity;
+import org.tyaa.training.current.server.repositories.LevelRepository;
 import org.tyaa.training.current.server.repositories.RoleRepository;
 import org.tyaa.training.current.server.repositories.UserRepository;
 import org.tyaa.training.current.server.services.interfaces.IAuthService;
@@ -23,6 +25,9 @@ public class ServerApplication {
 	@Value("${custom.init-data.roles}")
 	private List<String> roles;
 
+	@Value("${custom.init-data.levels}")
+	private List<String> levels;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
@@ -33,6 +38,7 @@ public class ServerApplication {
 	@Bean
 	public CommandLineRunner initData (RoleRepository roleRepository,
 									   UserRepository userRepository,
+									   LevelRepository levelRepository,
 									   PasswordEncoder passwordEncoder) {
 		return args -> {
 			// roleRepository.truncateTable();
@@ -71,6 +77,10 @@ public class ServerApplication {
 							.role(userRole)
 							.build()
 			);
+			/* Обеспечение наличия в БД нескольких уровней владения языком */
+			for (String levelName : levels) {
+				levelRepository.save(LevelEntity.builder().name(levelName).build());
+			}
 		};
 	}
 }

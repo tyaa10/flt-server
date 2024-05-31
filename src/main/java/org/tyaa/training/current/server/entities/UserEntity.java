@@ -30,6 +30,10 @@ public class UserEntity implements Serializable {
     @JoinColumn(name="role_id", nullable = false)
     private RoleEntity role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
+    private UserProfileEntity profile;
+
     public Long getId() {
         return id;
     }
@@ -60,5 +64,13 @@ public class UserEntity implements Serializable {
 
     public void setRole(RoleEntity role) {
         this.role = role;
+    }
+
+    public UserProfileEntity getProfile() {
+        return profile;
+    }
+
+    public void setProfile(UserProfileEntity profile) {
+        this.profile = profile;
     }
 }
