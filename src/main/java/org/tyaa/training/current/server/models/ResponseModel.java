@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseModel {
+public class ResponseModel<T> {
     public static final String SUCCESS_STATUS = "success";
     public static final String FAIL_STATUS = "fail";
     private String status;
     private String message;
-    private Object data;
+    private T data;
 }

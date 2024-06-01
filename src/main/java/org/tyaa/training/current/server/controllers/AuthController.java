@@ -2,6 +2,10 @@ package org.tyaa.training.current.server.controllers;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -36,6 +40,18 @@ public class AuthController {
     @Operation(summary = "Get all roles")
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/roles")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Roles successfully retrieved",
+                    content = @Content(schema = @Schema(implementation = GetRolesResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = Void.class))
+            )
+    })
     public ResponseEntity<ResponseModel> getRoles () {
         return new ResponseEntity<>(authService.getRoles(), HttpStatus.OK);
     }
@@ -124,4 +140,6 @@ public class AuthController {
     public ResponseEntity<ResponseModel> onError() {
         return new ResponseEntity<>(authService.onError(), HttpStatus.UNAUTHORIZED);
     }
+
+    private class GetRolesResponseModel extends ResponseModel<List<RoleModel>> {}
 }
