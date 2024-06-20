@@ -1,5 +1,9 @@
 package org.tyaa.training.current.server.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.stereotype.Service;
 import org.tyaa.training.current.server.entities.LevelEntity;
 import org.tyaa.training.current.server.models.LevelModel;
@@ -13,12 +17,27 @@ import java.util.Optional;
  * Реализация службы уровней владения языком, использующая РБД-репозитории
  * */
 @Service
-public class LevelService implements ILevelService {
+public class LevelService extends BaseService implements ILevelService {
 
     private final LevelRepository levelRepository;
 
-    public LevelService(LevelRepository levelRepository) {
+    public LevelService(ObjectMapper objectMapper, LevelRepository levelRepository) {
+        super(objectMapper);
         this.levelRepository = levelRepository;
+    }
+
+    public static LevelModel entityToModel(LevelEntity levelEntity) {
+        return LevelModel.builder()
+                .id(levelEntity.getId())
+                .name(levelEntity.getName())
+                .build();
+    }
+
+    public static LevelEntity modelToEntity(LevelModel levelModel) {
+        return LevelEntity.builder()
+                .id(levelModel.getId())
+                .name(levelModel.getName())
+                .build();
     }
 
     @Override
@@ -27,17 +46,14 @@ public class LevelService implements ILevelService {
                 .status(ResponseModel.SUCCESS_STATUS)
                 .message("All the levels fetched successfully")
                 .data(levelRepository.findAll().stream()
-                        .map(levelEntity -> LevelModel.builder()
-                                .id(levelEntity.getId())
-                                .name(levelEntity.getName())
-                                .build())
+                        .map(LevelService::entityToModel)
                         .toList())
                 .build();
     }
 
     @Override
     public ResponseModel createLevel(LevelModel levelModel) {
-        levelRepository.save(LevelEntity.builder().name(levelModel.getName()).build());
+        levelRepository.save(modelToEntity(levelModel));
         return ResponseModel.builder()
                 .status(ResponseModel.SUCCESS_STATUS)
                 .message(String.format("Level %s created", levelModel.name))
@@ -45,17 +61,21 @@ public class LevelService implements ILevelService {
     }
 
     @Override
-    public ResponseModel updateLevel(LevelModel levelModel) {
-        Optional<LevelEntity> levelEntityOptional = levelRepository.findById(levelModel.getId());
+    public ResponseModel updateLevel(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException {
+        Optional<LevelEntity> levelEntityOptional = levelRepository.findById(id);
         if (levelEntityOptional.isPresent()) {
+            LevelEntity levelEntity = levelEntityOptional.get();
+            LevelModel patchedLevelModel = applyJsonPatch(patch, entityToModel(levelEntity));
+            levelEntity.setName(patchedLevelModel.getName());
+            levelRepository.save(levelEntity);
             return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("Level #%d not found", levelModel.getId()))
+                    .status(ResponseModel.SUCCESS_STATUS)
+                    .message(String.format("Level #%d updated", id))
                     .build();
         } else {
             return ResponseModel.builder()
-                    .status(ResponseModel.SUCCESS_STATUS)
-                    .message(String.format("Level #%d updated", levelModel.getId()))
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message(String.format("Level #%d not found", id))
                     .build();
         }
     }

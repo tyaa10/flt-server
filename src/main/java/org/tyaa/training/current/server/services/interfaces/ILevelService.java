@@ -1,5 +1,8 @@
 package org.tyaa.training.current.server.services.interfaces;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.tyaa.training.current.server.models.LevelModel;
 import org.tyaa.training.current.server.models.ResponseModel;
 
@@ -7,6 +10,9 @@ import org.tyaa.training.current.server.models.ResponseModel;
  * Интерфейс службы уровней владения языком
  * */
 public interface ILevelService {
+    enum BASE_LEVELS {
+        BEGINNER, ELEMENTARY, INTERMEDIATE, UPPER_INTERMEDIATE, ADVANCED, PROFICIENCY
+    }
     /**
      * Получение списка всех уровней
      * */
@@ -16,9 +22,11 @@ public interface ILevelService {
      * */
     ResponseModel createLevel(LevelModel roleModel);
     /**
-     * Изменение уровня (редактирование названия)
+     * Обновление данных языка
+     * @param id идентификатор уровня, данные которого нужно обновить
+     * @param patch данные для обновления
      * */
-    ResponseModel updateLevel(LevelModel roleModel);
+    ResponseModel updateLevel(Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException;
     /**
      * Удаление уровня
      * */

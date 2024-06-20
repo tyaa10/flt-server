@@ -23,10 +23,10 @@ public class LanguageEntity {
     private String name;
 
     @OneToMany(mappedBy = "nativeLanguage", fetch = FetchType.LAZY)
-    private Set<UserProfileEntity> profilesNative = new HashSet<>();
+    private Set<LanguageLevelEntity> nativeLanguageLevels = new HashSet<>();
 
     @OneToMany(mappedBy = "learningLanguage", fetch = FetchType.LAZY)
-    private Set<UserProfileEntity> profilesLearning = new HashSet<>();
+    private Set<LanguageLevelEntity> learningLanguageLevels = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -44,19 +44,19 @@ public class LanguageEntity {
         this.name = name;
     }
 
-    public Set<UserProfileEntity> getProfilesNative() {
-        return profilesNative;
+    public Set<LanguageLevelEntity> getNativeLanguageLevels() {
+        return nativeLanguageLevels;
     }
 
-    public void setProfilesNative(Set<UserProfileEntity> profilesNative) {
-        this.profilesNative = profilesNative;
+    public void setNativeLanguageLevels(Set<LanguageLevelEntity> nativeLanguageLevels) {
+        this.nativeLanguageLevels = nativeLanguageLevels;
     }
 
-    public Set<UserProfileEntity> getProfilesLearning() {
-        return profilesLearning;
+    public Set<LanguageLevelEntity> getLearningLanguageLevels() {
+        return learningLanguageLevels;
     }
 
-    public void setProfilesLearning(Set<UserProfileEntity> profilesLearning) {
-        this.profilesLearning = profilesLearning;
+    public void setLearningLanguageLevels(Set<LanguageLevelEntity> learningLanguageLevels) {
+        this.learningLanguageLevels = learningLanguageLevels;
     }
 }

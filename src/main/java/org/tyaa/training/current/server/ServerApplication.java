@@ -1,18 +1,10 @@
 package org.tyaa.training.current.server;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.tyaa.training.current.server.entities.LevelEntity;
-import org.tyaa.training.current.server.entities.RoleEntity;
-import org.tyaa.training.current.server.entities.UserEntity;
-import org.tyaa.training.current.server.repositories.LevelRepository;
-import org.tyaa.training.current.server.repositories.RoleRepository;
-import org.tyaa.training.current.server.repositories.UserRepository;
-import org.tyaa.training.current.server.services.interfaces.IAuthService;
+import org.tyaa.training.current.server.seeders.interfaces.ISeeder;
 
 import java.util.List;
 
@@ -22,12 +14,9 @@ import java.util.List;
 @SpringBootApplication
 public class ServerApplication {
 
-	@Value("${custom.init-data.roles}")
-	private List<String> roles;
-
-	@Value("${custom.init-data.levels}")
-	private List<String> levels;
-
+	/**
+	 * Стандартная точка входа в приложение
+	 * */
 	public static void main(String[] args) {
 		SpringApplication.run(ServerApplication.class, args);
 	}
@@ -36,51 +25,7 @@ public class ServerApplication {
 	 * Инициализация БД
 	 * */
 	@Bean
-	public CommandLineRunner initData (RoleRepository roleRepository,
-									   UserRepository userRepository,
-									   LevelRepository levelRepository,
-									   PasswordEncoder passwordEncoder) {
-		return args -> {
-			// roleRepository.truncateTable();
-			/* Обеспечение наличия в БД ролей пользователей */
-			for (String roleName : roles) {
-				roleRepository.save(RoleEntity.builder().name(roleName).build());
-			}
-			/* Обеспечение наличия в БД нескольких фейковых пользователей для отладки и тестирования приложения */
-			RoleEntity adminRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.ADMIN.ordinal()));
-			RoleEntity userRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.CUSTOMER.ordinal()));
-			userRepository.save(
-					UserEntity.builder()
-							.name("admin")
-							.password(passwordEncoder.encode("AdminPassword1%"))
-							.role(adminRole)
-							.build()
-			);
-			userRepository.save(
-					UserEntity.builder()
-							.name("one")
-							.password(passwordEncoder.encode("UserPassword1%"))
-							.role(userRole)
-							.build()
-			);
-			userRepository.save(
-					UserEntity.builder()
-							.name("two")
-							.password(passwordEncoder.encode("UserPassword2%"))
-							.role(userRole)
-							.build()
-			);
-			userRepository.save(
-					UserEntity.builder()
-							.name("three")
-							.password(passwordEncoder.encode("UserPassword3%"))
-							.role(userRole)
-							.build()
-			);
-			/* Обеспечение наличия в БД нескольких уровней владения языком */
-			for (String levelName : levels) {
-				levelRepository.save(LevelEntity.builder().name(levelName).build());
-			}
-		};
+	public CommandLineRunner initData (List<ISeeder> seeders) {
+		return args -> seeders.forEach(ISeeder::seed);
 	}
 }

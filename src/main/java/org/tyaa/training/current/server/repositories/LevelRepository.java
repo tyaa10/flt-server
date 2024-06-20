@@ -8,4 +8,6 @@ import org.tyaa.training.current.server.entities.LevelEntity;
  * Репозиторий уровней владения языком
  * */
 @Repository
-public interface LevelRepository extends JpaRepository<LevelEntity, Long> {}
+public interface LevelRepository extends JpaRepository<LevelEntity, Long> {
+    LevelEntity findLevelEntityByName(String name);
+}

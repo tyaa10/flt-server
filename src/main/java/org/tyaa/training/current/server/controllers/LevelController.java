@@ -1,6 +1,7 @@
 package org.tyaa.training.current.server.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,10 @@ import org.tyaa.training.current.server.services.interfaces.ILevelService;
 /**
  * Контроллер уровней владения языком
  * */
-@Tag(name = "Levels", description = "Language levels")
+@Tag(name = "Levels", description = "Learning language levels")
 @RestController
 @RequestMapping("/api/levels")
+@SecurityRequirement(name = "jsessionid")
 public class LevelController {
 
     private final ILevelService levelService;
@@ -25,11 +27,13 @@ public class LevelController {
     }
 
     @Operation(summary = "Get all levels")
+    @GetMapping
     public ResponseEntity<ResponseModel> getLevels() {
         return new ResponseEntity<>(levelService.getLevels(), HttpStatus.OK);
     }
 
     @Operation(summary = "Create a new level")
+    @PostMapping
     public ResponseEntity<ResponseModel> createLevel(@RequestBody LevelModel levelModel) {
         ResponseModel responseModel = levelService.createLevel(levelModel);
         return new ResponseEntity<>(

@@ -77,7 +77,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                         // запросы к конечной точке "роль" методом GET разрешены всем
                         .requestMatchers(HttpMethod.GET, "/api/auth/role/**").permitAll()
                         // запросы к конечной точке "профиль" любыми методами разрешены только аутентифицированным
-                        .requestMatchers("/api/profile/**").authenticated()
+                        .requestMatchers("/api/profiles/**").authenticated()
+                        // запросы к конечной точке "языки" любыми методами разрешены только аутентифицированным
+                        .requestMatchers("/api/languages/**").authenticated()
+                        // запросы к конечной точке "уровни" любыми методами разрешены только аутентифицированным
+                        .requestMatchers("/api/levels/**").authenticated()
+                        // запросы к конечной точке "комбинаций 'родной язык - изучаемый язык - уровень владения языком'" любыми методами разрешены только аутентифицированным
+                        .requestMatchers("/api/language-levels/**").authenticated()
                         // запросы к любым конечным точкам, когда в пути есть секция "admin", разрешены только администраторам
                         .requestMatchers("/api/*/admin/**").hasRole("ADMIN"))
                 // настройки ответов после попытки авторизации

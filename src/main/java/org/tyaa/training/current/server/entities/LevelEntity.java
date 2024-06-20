@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,7 +23,7 @@ public class LevelEntity {
     private String name;
 
     @OneToMany(mappedBy = "level", fetch = FetchType.LAZY)
-    private Set<UserProfileEntity> profiles;
+    private Set<LanguageLevelEntity> languageLevels = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -40,11 +41,11 @@ public class LevelEntity {
         this.name = name;
     }
 
-    public Set<UserProfileEntity> getProfiles() {
-        return profiles;
+    public Set<LanguageLevelEntity> getLanguageLevels() {
+        return languageLevels;
     }
 
-    public void setProfiles(Set<UserProfileEntity> profiles) {
-        this.profiles = profiles;
+    public void setLanguageLevels(Set<LanguageLevelEntity> languageLevels) {
+        this.languageLevels = languageLevels;
     }
 }

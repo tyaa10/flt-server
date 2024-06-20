@@ -34,4 +34,6 @@ spring:
 custom:
   init-data:
     roles: ROLE_ADMIN, ROLE_CUSTOMER
+    users: '{admin: "AdminPassword1%", one: "UserPassword1%", two: "UserPassword2%", three: "UserPassword3%"}'
     levels: beginner, elementary, intermediate, upper-intermediate, advanced, proficiency
+    languages: English, Русский

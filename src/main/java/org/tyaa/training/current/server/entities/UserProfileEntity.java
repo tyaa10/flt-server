@@ -27,16 +27,8 @@ public class UserProfileEntity {
     private UserEntity user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="native_language_id", nullable = false)
-    private LanguageEntity nativeLanguage;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="learning_language_id", nullable = false)
-    private LanguageEntity learningLanguage;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="level_id", nullable = false)
-    private LevelEntity level;
+    @JoinColumn(name="language_level_id", nullable = false)
+    private LanguageLevelEntity languageLevel;
 
     public Long getId() {
         return id;
@@ -70,27 +62,11 @@ public class UserProfileEntity {
         this.user = user;
     }
 
-    public LanguageEntity getNativeLanguage() {
-        return nativeLanguage;
+    public LanguageLevelEntity getLanguageLevel() {
+        return languageLevel;
     }
 
-    public void setNativeLanguage(LanguageEntity nativeLanguage) {
-        this.nativeLanguage = nativeLanguage;
-    }
-
-    public LanguageEntity getLearningLanguage() {
-        return learningLanguage;
-    }
-
-    public void setLearningLanguage(LanguageEntity learningLanguage) {
-        this.learningLanguage = learningLanguage;
-    }
-
-    public LevelEntity getLevel() {
-        return level;
-    }
-
-    public void setLevel(LevelEntity level) {
-        this.level = level;
+    public void setLanguageLevel(LanguageLevelEntity languageLevel) {
+        this.languageLevel = languageLevel;
     }
 }
