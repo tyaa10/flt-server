@@ -66,8 +66,7 @@ public class LevelService extends BaseService implements ILevelService {
         if (levelEntityOptional.isPresent()) {
             LevelEntity levelEntity = levelEntityOptional.get();
             LevelModel patchedLevelModel = applyJsonPatch(patch, entityToModel(levelEntity));
-            levelEntity.setName(patchedLevelModel.getName());
-            levelRepository.save(levelEntity);
+            levelRepository.save(modelToEntity(patchedLevelModel));
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("Level #%d updated", id))
