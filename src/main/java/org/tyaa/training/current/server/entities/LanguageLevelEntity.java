@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.Length;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "LanguageLevels")
 @Builder(toBuilder = true)
@@ -31,6 +34,9 @@ public class LanguageLevelEntity {
 
     @Column(name = "active")
     private boolean active;
+
+    @OneToMany(mappedBy = "languageLevel", fetch = FetchType.LAZY)
+    private Set<WordLessonEntity> wordLessons = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -70,5 +76,13 @@ public class LanguageLevelEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Set<WordLessonEntity> getWordLessons() {
+        return wordLessons;
+    }
+
+    public void setWordLessons(Set<WordLessonEntity> wordLessons) {
+        this.wordLessons = wordLessons;
     }
 }
