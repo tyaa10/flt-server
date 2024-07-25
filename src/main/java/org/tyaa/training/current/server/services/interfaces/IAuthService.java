@@ -20,6 +20,11 @@ public interface IAuthService {
     ResponseModel createUser(UserModel userModel);
     ResponseModel deleteUser(Long id);
     ResponseModel makeUserAdmin(Long id) throws Exception;
+    /**
+     * Получение подтверждения, что клиент сейчас аутентифицирован,
+     * и возврат информации об учетной записи
+     * @param authentication стандартные данные Spring Security о текущем пользователе
+     * */
     ResponseModel check(Authentication authentication);
     ResponseModel onSignOut();
     ResponseModel onError();

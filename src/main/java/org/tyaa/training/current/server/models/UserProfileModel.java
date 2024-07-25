@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.tyaa.training.current.server.models.interfaces.IModel;
 
 /**
  * Модель профиля пользователя
@@ -18,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserProfileModel {
+public class UserProfileModel implements IModel {
     /**
      * Локально уникальный идентификатор
      * */
@@ -40,7 +41,7 @@ public class UserProfileModel {
     /**
      * Название языка, изучаемого пользователем
      * */
-    public String learningLanguage;
+    public String learningLanguageName;
     /**
      * Название уровня владения языком, на который обучается пользователь
      * */

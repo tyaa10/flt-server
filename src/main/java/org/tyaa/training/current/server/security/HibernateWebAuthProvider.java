@@ -18,6 +18,7 @@ import org.tyaa.training.current.server.repositories.UserRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,7 +38,7 @@ public class HibernateWebAuthProvider implements AuthenticationProvider, UserDet
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        UserEntity user = userRepository.findUserByName(userName);
+        UserEntity user = userRepository.findUserByName(userName).get();
         return new UserDetails() {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -86,7 +87,10 @@ public class HibernateWebAuthProvider implements AuthenticationProvider, UserDet
         UserEntity user = null;
         // пытка найти в БД учетную запись по имени пользователя
         try {
-            user = userRepository.findUserByName(name);
+            Optional<UserEntity> userEntityOptional = userRepository.findUserByName(name);
+            if (userEntityOptional.isPresent()) {
+                user = userEntityOptional.get();
+            }
         } catch (Exception ex) {
             Logger.getLogger(HibernateWebAuthProvider.class.getName()).log(Level.SEVERE, null, ex);
         }

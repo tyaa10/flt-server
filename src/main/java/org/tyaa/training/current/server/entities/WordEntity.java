@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.Length;
+import org.tyaa.training.current.server.entities.interfaces.IEntity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class WordEntity {
+public class WordEntity implements IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -128,9 +128,6 @@ public class AuthService implements IAuthService {
         }
     }
 
-    // получение подтверждения, что клиент
-    // сейчас аутентифицирован,
-    // и возврат информации об учетной записи
     public ResponseModel check(Authentication authentication) {
         ResponseModel response = new ResponseModel();
         // если пользователь из текущего http-сеанса аутентифицирован

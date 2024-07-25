@@ -143,5 +143,10 @@ public class AuthController {
         return new ResponseEntity<>(authService.onError(), HttpStatus.UNAUTHORIZED);
     }
 
+    /**
+     * Технический класс для автоматической документации,
+     * задающий точный тип данных ответа сервера
+     * на запрос всех ролей
+     * */
     private class GetRolesResponseModel extends ResponseModel<List<RoleModel>> {}
 }

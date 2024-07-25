@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.tyaa.training.current.server.models.interfaces.IModel;
 
 /**
  * Модель языка
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LanguageModel {
+public class LanguageModel implements IModel {
     /**
      * Локально уникальный идентификатор
      * */

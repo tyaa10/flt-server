@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.tyaa.training.current.server.models.interfaces.IModel;
 
 /**
  * Модель роли пользователя
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RoleModel {
+public class RoleModel implements IModel {
     /**
      * Локально уникальный идентификатор
      * */

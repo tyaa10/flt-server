@@ -1,2 +1,4 @@
-package org.tyaa.training.current.server.models.interfaces;public interface IModel {
+package org.tyaa.training.current.server.models.interfaces;
+
+public interface IModel {
 }

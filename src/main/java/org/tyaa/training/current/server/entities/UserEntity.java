@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.tyaa.training.current.server.entities.interfaces.IEntity;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ import java.io.Serializable;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity implements Serializable {
+public class UserEntity implements Serializable, IEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
