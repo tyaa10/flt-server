@@ -98,12 +98,12 @@ public class UserProfileService extends BaseService implements IUserProfileServi
                 // подготовить данные ответа о найденном профиле
                 UserProfileModel profileModel = this.entityToModel(profileEntityOptional.get());
                 response.setStatus(ResponseModel.SUCCESS_STATUS);
-                response.setMessage(String.format("Profile for user %s fetched", authentication.getName()));
+                response.setMessage("Profile fetched");
                 response.setData(profileModel);
             } else {
                 // подготовить данные ответа о том, что профиль не найден
                 response.setStatus(ResponseModel.FAIL_STATUS);
-                response.setMessage("No profile");
+                response.setMessage("Profile not found");
             }
         } else {
             // подготовить данные ответа о том, что нет текущего пользователя,

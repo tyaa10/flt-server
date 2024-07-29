@@ -70,6 +70,22 @@ public class UserProfileController {
             );
     }
 
+    @Operation(summary = "Get current user profile")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @GetMapping("/profiles/current")
+    public ResponseEntity<ResponseModel> getProfile(Authentication authentication) {
+        ResponseModel responseModel = profileService.getCurrentUserProfile(authentication);
+        return new ResponseEntity<>(
+                responseModel,
+                switch (responseModel.getMessage()) {
+                    case "Profile not found" -> HttpStatus.NOT_FOUND;
+                    case "No user" -> HttpStatus.UNAUTHORIZED;
+                    case "Profile fetched" -> HttpStatus.OK;
+                    default -> HttpStatus.INTERNAL_SERVER_ERROR;
+                }
+        );
+    }
+
     /**
      * Технический класс для автоматической документации,
      * задающий точный тип данных ответа сервера
