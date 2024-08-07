@@ -91,6 +91,7 @@ public class UserProfileService extends BaseService implements IUserProfileServi
         ResponseModel response = new ResponseModel();
         // если пользователь из текущего http-сеанса аутентифицирован
         if (authentication != null && authentication.isAuthenticated()) {
+            // попытаться получить из БД профиль пользователя по его имени
             Optional<UserProfileEntity> profileEntityOptional =
                     profileRepository.findProfileByUserName(authentication.getName());
             // если существует профиль данного пользователя
@@ -134,14 +135,16 @@ public class UserProfileService extends BaseService implements IUserProfileServi
                 // установка текущего пользователя в сущность профиля
                 UserEntity userEntity = userEntityOptional.get();
                 userEntity.setProfile(profileEntity);
-                // profileEntity.setUser(userEntity);
-                // вставка записи профиля
-                // profileRepository.save(profileEntity);
-                userRepository.save(userEntity);
+                // вставка записи профиля и добавление её идентификатора в запись пользователя
+                userEntity = userRepository.save(userEntity);
+                // установка идентификатора созданной записи профиля в объект модели профиля
+                profileModel.setId(userEntity.getProfile().getId());
                 // возврат объекта с сообщением об успешном создании профиля
+                // и с данными профиля, дополненными идентификатором, который создала и вернула СУБД
                 return ResponseModel.builder()
                         .status(ResponseModel.SUCCESS_STATUS)
                         .message("User profile created")
+                        .data(profileModel)
                         .build();
             } else {
                 return ResponseModel.builder()

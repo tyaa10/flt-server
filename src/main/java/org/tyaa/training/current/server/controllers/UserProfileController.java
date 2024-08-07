@@ -41,11 +41,16 @@ public class UserProfileController {
             @ApiResponse(
                     responseCode = "200",
                     description = "Profiles successfully retrieved",
-                    content = @Content(schema = @Schema(implementation = UserProfileController.GetProfilesResponseModel.class))
+                    content = @Content(schema = @Schema(implementation = GetProfilesResponseModel.class))
             ),
             @ApiResponse(
                     responseCode = "401",
                     description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = Void.class))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden (administrator rights required)",
                     content = @Content(schema = @Schema(implementation = Void.class))
             )
     })
@@ -56,6 +61,28 @@ public class UserProfileController {
     @Operation(summary = "Create a new profile for current user")
     @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
     @PostMapping("/profiles")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "User profile created",
+                    content = @Content(schema = @Schema(implementation = GetProfileResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "No user",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "409",
+                    description = "Profile already exists",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            )
+    })
     public ResponseEntity<ResponseModel> createProfile(Authentication authentication, @RequestBody UserProfileModel profileModel) {
         ResponseModel responseModel = profileService.createProfile(authentication, profileModel);
         return new ResponseEntity<>(
@@ -92,4 +119,11 @@ public class UserProfileController {
      * на запрос всех профилей
      * */
     private class GetProfilesResponseModel extends ResponseModel<List<UserProfileModel>> {}
+
+    /**
+     * Технический класс для автоматической документации,
+     * задающий точный тип данных ответа сервера
+     * на запросы, предполагающие получение одного объекта модели профиля
+     * */
+    private class GetProfileResponseModel extends ResponseModel<UserProfileModel> {}
 }

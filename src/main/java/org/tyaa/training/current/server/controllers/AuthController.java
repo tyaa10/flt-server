@@ -52,6 +52,11 @@ public class AuthController {
                     responseCode = "401",
                     description = "Unauthorized",
                     content = @Content(schema = @Schema(implementation = Void.class))
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden (administrator rights required)",
+                    content = @Content(schema = @Schema(implementation = Void.class))
             )
     })
     public ResponseEntity<ResponseModel> getRoles () {
