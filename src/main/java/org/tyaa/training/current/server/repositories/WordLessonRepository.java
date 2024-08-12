@@ -5,10 +5,13 @@ import org.springframework.stereotype.Repository;
 import org.tyaa.training.current.server.entities.LevelEntity;
 import org.tyaa.training.current.server.entities.WordLessonEntity;
 
+import java.util.List;
+
 /**
  * Репозиторий уроков по изучению слов
  * */
 @Repository
 public interface WordLessonRepository extends JpaRepository<WordLessonEntity, Long> {
     WordLessonEntity findWordLessonEntityByName(String name);
+    List<WordLessonEntity> findByLanguageLevelId(Long languageLevelId);
 }
