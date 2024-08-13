@@ -4,12 +4,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.tyaa.training.current.server.entities.UserProfileEntity;
 import org.tyaa.training.current.server.entities.WordLessonEntity;
+import org.tyaa.training.current.server.entities.interfaces.ILessonEntity;
 import org.tyaa.training.current.server.models.ResponseModel;
-import org.tyaa.training.current.server.models.UserProfileModel;
-import org.tyaa.training.current.server.models.WordLessonModel;
+import org.tyaa.training.current.server.models.LessonModel;
 import org.tyaa.training.current.server.repositories.UserProfileRepository;
 import org.tyaa.training.current.server.repositories.WordLessonRepository;
-import org.tyaa.training.current.server.services.interfaces.IWordLessonService;
+import org.tyaa.training.current.server.services.interfaces.ILessonService;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,18 +18,18 @@ import java.util.Optional;
  * Реализация службы уроков по изучению слов
  * */
 @Service
-public class WordLessonService implements IWordLessonService {
+public class LessonService implements ILessonService {
 
     private final WordLessonRepository wordLessonRepository;
     private final UserProfileRepository profileRepository;
 
-    public WordLessonService(WordLessonRepository wordLessonRepository, UserProfileRepository profileRepository) {
+    public LessonService(WordLessonRepository wordLessonRepository, UserProfileRepository profileRepository) {
         this.wordLessonRepository = wordLessonRepository;
         this.profileRepository = profileRepository;
     }
 
-    public static WordLessonModel entityToItemModel(WordLessonEntity wordLessonEntity) {
-        return WordLessonModel.builder()
+    public static LessonModel entityToModel(ILessonEntity wordLessonEntity) {
+        return LessonModel.builder()
                 .id(wordLessonEntity.getId())
                 .name(wordLessonEntity.getName())
                 .build();
@@ -52,9 +52,9 @@ public class WordLessonService implements IWordLessonService {
                 // подготовить данные ответа со списком уроков,
                 // соответствующих комбинации языки-уровень из профиля текущего пользователя
                 response.setStatus(ResponseModel.SUCCESS_STATUS);
-                List<WordLessonModel> lessonListItems =
+                List<LessonModel> lessonListItems =
                         wordLessonRepository.findByLanguageLevelId(languageLevelId).stream()
-                                .map(WordLessonService::entityToItemModel)
+                                .map(LessonService::entityToModel)
                                 .toList();
                 response.setData(lessonListItems);
                 response.setMessage(

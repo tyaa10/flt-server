@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.Set;
 
 /**
- * Модель урока по изучению слов
+ * Модель урока
  * */
 @Data
 @Builder(toBuilder = true)
@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class WordLessonModel {
+public class LessonModel {
 
     /**
      * Локально уникальный идентификатор
@@ -29,9 +29,4 @@ public class WordLessonModel {
      * Название урока на родном языке
      * */
     public String name;
-    /**
-     * Множество моделей слов для изучения
-     * */
-    @Hidden
-    public Set<WordLessonModel> words;
 }

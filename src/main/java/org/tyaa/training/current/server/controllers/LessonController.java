@@ -15,27 +15,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tyaa.training.current.server.models.ResponseModel;
-import org.tyaa.training.current.server.models.WordLessonModel;
-import org.tyaa.training.current.server.services.interfaces.IWordLessonService;
+import org.tyaa.training.current.server.models.LessonModel;
+import org.tyaa.training.current.server.services.interfaces.ILessonService;
 
 import java.util.List;
 
 /**
  * Контроллер обучающих уроков
  * */
-@Tag(name = "Word Lessons", description = "Word learning lessons")
+@Tag(name = "Lessons", description = "Learning lessons")
 @RestController
-@RequestMapping("/api/lessons/word-lessons")
+@RequestMapping("/api/lessons")
 @SecurityRequirement(name = "jsessionid")
 public class LessonController {
 
-    private final IWordLessonService wordLessonService;
+    private final ILessonService wordLessonService;
 
-    public LessonController(IWordLessonService wordLessonService) {
+    public LessonController(ILessonService wordLessonService) {
         this.wordLessonService = wordLessonService;
     }
 
-    @Operation(summary = "Get word-lesson list items for current language-level combination")
+    @Operation(summary = "Get lesson list items for current language-level combination")
     @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
     @GetMapping("/list-items")
     @ApiResponses(value = {
@@ -74,5 +74,5 @@ public class LessonController {
      * задающий точный тип данных ответа сервера
      * на запрос пунктов для списка уроков
      * */
-    private class GetWordLessonListItemsResponseModel extends ResponseModel<List<WordLessonModel>> {}
+    private class GetWordLessonListItemsResponseModel extends ResponseModel<List<LessonModel>> {}
 }
