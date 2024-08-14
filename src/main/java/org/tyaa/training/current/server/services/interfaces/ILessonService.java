@@ -4,12 +4,12 @@ import org.springframework.security.core.Authentication;
 import org.tyaa.training.current.server.models.ResponseModel;
 
 /**
- * Интерфейс службы уроков по изучению слов
+ * Интерфейс службы уроков
  * */
 public interface ILessonService {
 
     /**
-     * Получить список моделей уроков по изучению слов,
+     * Получить список моделей уроков,
      * доступных при текущей комбинации языков и уровня
      * @param authentication стандартные данные Spring Security о текущем пользователе
      * */
