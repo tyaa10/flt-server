@@ -46,4 +46,13 @@ public class WordService implements IWordService {
                 .data(wordModels)
                 .build();
     }
+
+    @Override
+    public ResponseModel clearWordLessonWords(Long wordLessonId) {
+        wordRepository.deleteByWordLessonId(wordLessonId);
+        return ResponseModel.builder()
+                .status(SUCCESS_STATUS)
+                .message(String.format("Words from word-study lesson #%d deleted", wordLessonId))
+                .build();
+    }
 }

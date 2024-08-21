@@ -15,4 +15,5 @@ import java.util.List;
 public interface WordRepository extends JpaRepository<WordEntity, Long> {
     WordEntity findWordEntityByWord(String word);
     List<WordEntity> findByWordLessonId(Long wordLessonId);
+   void deleteByWordLessonId(Long wordLessonId);
 }

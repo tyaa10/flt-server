@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tyaa.training.current.server.models.ResponseModel;
 import org.tyaa.training.current.server.models.WordModel;
 import org.tyaa.training.current.server.services.interfaces.IWordService;
@@ -57,6 +54,15 @@ public class WordController {
                 ((responseModel.getStatus().equals(ResponseModel.SUCCESS_STATUS))
                             ? HttpStatus.OK
                             : HttpStatus.INTERNAL_SERVER_ERROR)
+        );
+    }
+
+    @Operation(summary = "Delete word-study lesson words")
+    @DeleteMapping(value = "/{id}/words")
+    public ResponseEntity<ResponseModel> deleteWordLessonWords(@PathVariable("id") Long wordLessonId) {
+        return new ResponseEntity<>(
+                wordService.clearWordLessonWords(wordLessonId),
+                HttpStatus.NO_CONTENT
         );
     }
 

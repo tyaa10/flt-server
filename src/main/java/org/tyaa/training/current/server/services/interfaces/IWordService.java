@@ -12,4 +12,10 @@ public interface IWordService {
      * @param wordLessonId идентификатор урока по изучению слов
      * */
     ResponseModel getWordsByWordLessonId(Long wordLessonId);
+
+    /**
+     * Очистить список моделей слов указанного урока
+     * @param wordLessonId идентификатор урока по изучению слов
+     * */
+    ResponseModel clearWordLessonWords(Long wordLessonId);
 }
