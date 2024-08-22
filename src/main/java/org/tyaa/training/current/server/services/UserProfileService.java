@@ -17,6 +17,9 @@ import org.tyaa.training.current.server.services.interfaces.IModelConverter;
 import org.tyaa.training.current.server.services.interfaces.IUserProfileService;
 
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Реализация службы профилей пользователей, использующая РБД-репозитории
@@ -35,6 +38,7 @@ public class UserProfileService extends BaseService implements IUserProfileServi
         this.userRepository = userRepository;
     }
 
+    @Override
     public UserProfileModel entityToModel(UserProfileEntity profileEntity) {
         return UserProfileModel.builder()
                 .id(profileEntity.getId())
@@ -46,6 +50,7 @@ public class UserProfileService extends BaseService implements IUserProfileServi
                 .build();
     }
 
+    @Override
     public UserProfileEntity modelToEntity(UserProfileModel profileModel) {
         return UserProfileEntity.builder()
                 .id(profileModel.getId())
@@ -193,5 +198,33 @@ public class UserProfileService extends BaseService implements IUserProfileServi
                 .status(ResponseModel.SUCCESS_STATUS)
                 .message(String.format("Profile #%d deleted", id))
                 .build();
+    }
+
+    @Override
+    public ResponseModel doInProfileContext(
+            Authentication authentication,
+            ResponseModel responseModel,
+            Function<UserProfileEntity, ResponseModel> action
+    ) throws Exception {
+        // если пользователь из текущего http-сеанса аутентифицирован
+        if (authentication != null && authentication.isAuthenticated()) {
+            // попытаться получить из БД профиль пользователя по его имени
+            Optional<UserProfileEntity> profileEntityOptional =
+                    profileRepository.findProfileByUserName(authentication.getName());
+            // если существует профиль данного пользователя
+            if (profileEntityOptional.isPresent()) {
+                responseModel = action.apply(profileEntityOptional.get());
+            } else {
+                // подготовить данные ответа о том, что профиль не найден
+                responseModel.setStatus(ResponseModel.FAIL_STATUS);
+                responseModel.setMessage("Profile not found");
+            }
+        } else {
+            // подготовить данные ответа о том, что нет текущего пользователя,
+            // профиль которого можно было бы найти
+            responseModel.setStatus(ResponseModel.FAIL_STATUS);
+            responseModel.setMessage("No user");
+        }
+        return responseModel;
     }
 }

@@ -20,8 +20,14 @@ public class WordTestEntity implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "success_score", nullable = false)
-    private Double successScore;
+    /* @Column(name = "success_score", nullable = false)
+    private Double successScore; */
+
+    @Column(name = "attempts_number", nullable = false)
+    private Integer attemptsNumber;
+
+    @Column(name = "success_number", nullable = false)
+    private Integer successNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="profile_id", nullable = false)
@@ -39,12 +45,28 @@ public class WordTestEntity implements IEntity {
         this.id = id;
     }
 
-    public Double getSuccessScore() {
+    /* public Double getSuccessScore() {
         return successScore;
     }
 
     public void setSuccessScore(Double successScore) {
         this.successScore = successScore;
+    } */
+
+    public Integer getAttemptsNumber() {
+        return attemptsNumber;
+    }
+
+    public void setAttemptsNumber(Integer attemptsNumber) {
+        this.attemptsNumber = attemptsNumber;
+    }
+
+    public Integer getSuccessNumber() {
+        return successNumber;
+    }
+
+    public void setSuccessNumber(Integer successNumber) {
+        this.successNumber = successNumber;
     }
 
     public UserProfileEntity getProfile() {

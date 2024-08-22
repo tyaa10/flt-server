@@ -2,17 +2,14 @@ package org.tyaa.training.current.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import io.swagger.v3.oas.annotations.Hidden;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.tyaa.training.current.server.models.interfaces.IModel;
 
-import java.util.Set;
-
 /**
- * Модель урока
+ * Модель результатов проверок знания слова
  * */
 @Data
 @Builder(toBuilder = true)
@@ -20,14 +17,20 @@ import java.util.Set;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class LessonModel implements IModel {
+public class WordTestModel implements IModel {
 
     /**
      * Локально уникальный идентификатор
      * */
     public Long id;
+
     /**
-     * Название урока на родном языке
+     * Число попыток перевода слова
      * */
-    public String name;
+    public Integer attemptsNumber;
+
+    /**
+     * Число успешных случаев перевода слова
+     * */
+    public Integer successNumber;
 }

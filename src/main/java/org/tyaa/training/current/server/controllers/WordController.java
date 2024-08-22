@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Контроллер изучаемых слов
  * */
-@Tag(name = "Words", description = "Learning lessons")
+@Tag(name = "Words", description = "Lesson's words")
 @RestController
 @RequestMapping("/api/lessons/word-lessons")
 @SecurityRequirement(name = "jsessionid")

@@ -25,8 +25,9 @@ public interface ILanguageService {
     ResponseModel getLanguage(Long id);
     /**
      * Создание языка
+     * @param languageModel модель языка
      * */
-    ResponseModel createLanguage(LanguageModel roleModel);
+    ResponseModel createLanguage(LanguageModel languageModel);
     /**
      * Обновление данных языка
      * @param id идентификатор языка, данные которого нужно обновить
