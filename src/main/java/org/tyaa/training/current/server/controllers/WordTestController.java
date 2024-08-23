@@ -61,7 +61,7 @@ public class WordTestController {
                     content = @Content(schema = @Schema(implementation = ResponseModel.class))
             )
     })
-    public ResponseEntity<ResponseModel> getWordTestResult(Authentication authentication, @PathVariable("id") Long wordId) throws Exception {
+    public ResponseEntity<ResponseModel> getWordTestResults(Authentication authentication, @PathVariable("id") Long wordId) throws Exception {
         ResponseModel responseModel = wordTestService.getWordTestResults(authentication, wordId);
         return new ResponseEntity<>(
                 responseModel,
@@ -103,7 +103,7 @@ public class WordTestController {
                     content = @Content(schema = @Schema(implementation = ResponseModel.class))
             )
     })
-    public ResponseEntity<ResponseModel> createWordTestResult(
+    public ResponseEntity<ResponseModel> createWordTestResults(
             Authentication authentication,
             @PathVariable("id") Long wordId,
             @RequestBody WordTestModel wordTestModel) throws Exception {
@@ -123,7 +123,7 @@ public class WordTestController {
     @Operation(summary = "Update the results of a user's word knowledge test")
     @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
     // явное задание типа принимаемых данных - JSON со стандартной структурой обновления "JSON Patch"
-    @PatchMapping(path = "/words/{id}/results", consumes = "application/json-patch+json")
+    @PatchMapping(path = "/results/{id}", consumes = "application/json-patch+json")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -142,7 +142,7 @@ public class WordTestController {
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(content = @Content(array = @ArraySchema(schema = @Schema(implementation = JsonPatchModel.class))))
-    public ResponseEntity<ResponseModel> updateTestResult(
+    public ResponseEntity<ResponseModel> updateTestResults(
             @PathVariable("id") Long id,
             @RequestBody JsonPatch patch
     ) throws JsonPatchException, JsonProcessingException {
@@ -152,6 +152,38 @@ public class WordTestController {
                 responseModel.getStatus().equals(ResponseModel.SUCCESS_STATUS)
                         ? HttpStatus.OK
                         : responseModel.getMessage().endsWith("not found") ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR
+        );
+    }
+
+    @Operation(summary = "Add the result of the word knowledge test")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @PostMapping("/words/{id}/results/add")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Word knowledge test result added"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Profile not found",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            )
+    })
+    public ResponseEntity<ResponseModel> addTestResult(Authentication authentication, @PathVariable("id") Long wordId, @RequestBody Boolean success) throws Exception {
+        ResponseModel responseModel = wordTestService.addTestResult(authentication, wordId, success);
+        return new ResponseEntity<>(
+                responseModel,
+                responseModel.getStatus().equals(ResponseModel.SUCCESS_STATUS)
+                        ? HttpStatus.OK
+                        : switch (responseModel.getMessage()) {
+                    case "No user" -> HttpStatus.UNAUTHORIZED;
+                    default -> responseModel.getMessage().endsWith("not found") ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR;
+                }
         );
     }
 

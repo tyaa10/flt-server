@@ -14,6 +14,7 @@ import org.tyaa.training.current.server.repositories.WordRepository;
 import org.tyaa.training.current.server.repositories.WordTestRepository;
 import org.tyaa.training.current.server.services.interfaces.IUserProfileService;
 import org.tyaa.training.current.server.services.interfaces.IWordTestService;
+import org.tyaa.training.current.server.utils.TypeConverters;
 
 import java.util.Optional;
 
@@ -85,17 +86,17 @@ public class WordTestService extends BaseService implements IWordTestService {
     @Override
     public ResponseModel createTestResults(Authentication authentication, Long wordId, WordTestModel wordTestModel) throws Exception {
         // попытка получить данные результатов проверок знания слова с указанным идентификатором
-        ResponseModel getWordTestResultsResponse = getWordTestResults(authentication, wordId);
+        ResponseModel wordTestResultsResponse = getWordTestResults(authentication, wordId);
         // если данные получены - вернуть ответ с сообщением о попытке нарушения ограничения уникальности
-        if (getWordTestResultsResponse.getStatus().equals(ResponseModel.SUCCESS_STATUS)) {
+        if (wordTestResultsResponse.getStatus().equals(ResponseModel.SUCCESS_STATUS)) {
             return ResponseModel.builder()
                     .status(ResponseModel.FAIL_STATUS)
                     .message("Word knowledge test result already exists")
                     .build();
-        } else if (!getWordTestResultsResponse.getMessage().startsWith("Word test results")) {
+        } else if (!wordTestResultsResponse.getMessage().startsWith("Word test results")) {
             // иначе если данные не получены, и произошла ошибка -
             // вернуть ответ с сообщением об ошибке
-            return getWordTestResultsResponse;
+            return wordTestResultsResponse;
         }
         // иначе - создать пустой объект модели ответа, содержимое которого будет определено ниже
         ResponseModel response = new ResponseModel();
@@ -150,6 +151,51 @@ public class WordTestService extends BaseService implements IWordTestService {
                     .status(ResponseModel.FAIL_STATUS)
                     .message(String.format("Word test results #%d not found", id))
                     .build();
+        }
+    }
+
+    @Override
+    public ResponseModel addTestResult(Authentication authentication, Long wordId, Boolean success) throws Exception {
+        // попытка получить данные результатов проверок знания слова с указанным идентификатором
+        ResponseModel wordTestResultsResponse = getWordTestResults(authentication, wordId);
+        // если данные не получены - попытаться создать впервые
+        if (!wordTestResultsResponse.getStatus().equals(ResponseModel.SUCCESS_STATUS)) {
+            ResponseModel wordTestResultsCreationResponse =
+                    createTestResults(
+                    authentication,
+                    wordId,
+                    WordTestModel.builder()
+                            // начальное число попыток устанавливается равным единице
+                            .attemptsNumber(1)
+                            // начальное число успешных переводов равно нулю, если текущая попытка неуспешна, или единице - если успешна
+                            .successNumber(TypeConverters.booleanToInteger(success))
+                            .build()
+            );
+            // Если попытка создания удалась - установить в ответ сообщение об успешном добавлении результата.
+            if (wordTestResultsCreationResponse.getStatus().equals(ResponseModel.SUCCESS_STATUS)) {
+                wordTestResultsCreationResponse.setMessage("Word test result added");
+            }
+            // Иначе, если попытка создания не удалась - оставить неизменным полученный ответ с сообщением об ошибке.
+            // В любом случае вернуть ответ с сообщением.
+            return wordTestResultsCreationResponse;
+        } else {
+            // иначе - обновить данные результатов
+            // создание пустого объекта модели ответа, содержимое которого будет определено ниже
+            ResponseModel response = new ResponseModel();
+            // получение результатов проверки знаний слова в контексте профиля текущего пользователя
+            return profileService.doInProfileContext(authentication, response, profile -> {
+                // получить объект сущности результатов проверок знания слова со старыми данными
+                WordTestEntity wordTestEntity =
+                        wordTestRepository.findById(((WordTestModel) wordTestResultsResponse.getData()).getId()).get();
+                // обновить данные результатов в объекте сущности
+                wordTestEntity.setAttemptsNumber(wordTestEntity.getAttemptsNumber() + 1);
+                wordTestEntity.setSuccessNumber(wordTestEntity.getSuccessNumber() + TypeConverters.booleanToInteger(success));
+                // сохранить объект сущности с обновлёнными данными
+                wordTestRepository.save(wordTestEntity);
+                response.setStatus(ResponseModel.SUCCESS_STATUS);
+                response.setMessage("Word test result added");
+                return response;
+            });
         }
     }
 }

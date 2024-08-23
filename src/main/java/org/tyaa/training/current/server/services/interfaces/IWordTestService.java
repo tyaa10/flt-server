@@ -20,17 +20,25 @@ public interface IWordTestService {
     ResponseModel getWordTestResults(Authentication authentication, Long wordId) throws Exception;
 
     /**
-     * Получение результатов проверки знаний слова пользователем
+     * Получение результатов проверки знания слова пользователем
      * @param authentication стандартные данные Spring Security о текущем пользователе
-     * @param wordId
+     * @param wordId идентификатор данных для изучения слова
      * @param wordTestModel модель результатов проверки знания слова
      * */
     ResponseModel createTestResults(Authentication authentication, Long wordId, WordTestModel wordTestModel) throws Exception;
 
     /**
-     * Обновить результаты проверки знаний слова
+     * Обновить результаты проверки знания слова
      * @param id идентификатор результатов проверки, которые нужно обновить
      * @param patch данные для обновления
      * */
     ResponseModel updateTestResults (Long id, JsonPatch patch) throws JsonPatchException, JsonProcessingException;
+
+    /**
+     * Прибавить результат проверки знания слова
+     * @param authentication стандартные данные Spring Security о текущем пользователе
+     * @param wordId идентификатор данных для изучения слова
+     * @param success успешной ли была попытка перевода слова
+     * */
+    ResponseModel addTestResult (Authentication authentication, Long wordId, Boolean success) throws Exception;
 }
