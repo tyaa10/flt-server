@@ -36,7 +36,7 @@ public class WordTestController {
         this.wordTestService = wordTestService;
     }
 
-    @Operation(summary = "Get the results of a user's word knowledge test")
+    @Operation(summary = "Get the user's knowledge test results for a word")
     @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
     @GetMapping("/words/{id}/results")
     @ApiResponses(value = {
@@ -74,13 +74,52 @@ public class WordTestController {
         );
     }
 
+    @Operation(summary = "Get the user's knowledge test results for a word study lesson")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @GetMapping("/lessons/{id}/results")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Word study lesson knowledge test results",
+                    content = @Content(schema = @Schema(implementation = GetWordTestResultResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Profile not found",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Word test results not found",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
+            )
+    })
+    public ResponseEntity<ResponseModel> getWordStudyLessonTestResults(Authentication authentication, @PathVariable("id") Long lessonId) throws Exception {
+        ResponseModel responseModel = wordTestService.getWordStudyLessonTestResults(authentication, lessonId);
+        return new ResponseEntity<>(
+                responseModel,
+                responseModel.getStatus().equals(ResponseModel.SUCCESS_STATUS)
+                        ? HttpStatus.OK
+                        : switch (responseModel.getMessage()) {
+                    case "No user" -> HttpStatus.UNAUTHORIZED;
+                    default -> responseModel.getMessage().endsWith("not found") ? HttpStatus.NOT_FOUND : HttpStatus.INTERNAL_SERVER_ERROR;
+                }
+        );
+    }
+
     @Operation(summary = "Create a result record for the user's word knowledge test")
     @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
     @PostMapping("/words/{id}/results")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "Word knowledge test result created"
+                    description = "Word knowledge test result created",
+                    content = @Content(schema = @Schema(implementation = ResponseModel.class))
             ),
             @ApiResponse(
                     responseCode = "409",

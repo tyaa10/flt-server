@@ -20,6 +20,13 @@ public interface IWordTestService {
     ResponseModel getWordTestResults(Authentication authentication, Long wordId) throws Exception;
 
     /**
+     * Получение результатов проверки знаний пользователем всех слов указанного урока
+     * @param authentication стандартные данные Spring Security о текущем пользователе
+     * @param lessonId идентификатор урока по изучению слов
+     * */
+    ResponseModel getWordStudyLessonTestResults(Authentication authentication, Long lessonId) throws Exception;
+
+    /**
      * Получение результатов проверки знания слова пользователем
      * @param authentication стандартные данные Spring Security о текущем пользователе
      * @param wordId идентификатор данных для изучения слова

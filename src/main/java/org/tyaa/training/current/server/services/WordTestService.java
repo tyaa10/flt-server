@@ -16,6 +16,7 @@ import org.tyaa.training.current.server.services.interfaces.IUserProfileService;
 import org.tyaa.training.current.server.services.interfaces.IWordTestService;
 import org.tyaa.training.current.server.utils.TypeConverters;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -71,13 +72,67 @@ public class WordTestService extends BaseService implements IWordTestService {
                 WordTestEntity wordTestEntity = wordTestEntityOptional.get();
                 // скопировать данные из сущности в модель
                 response.setStatus(ResponseModel.SUCCESS_STATUS);
-                response.setMessage(String.format("Word test results for word #%d and profile #%d found", wordId, profile.getId()));
+                response.setMessage(String.format("Word test results for word #%d and profile #%d", wordId, profile.getId()));
                 response.setData(entityToModel(wordTestEntity));
             } else {
                 // объект модели ответа сервера с сообщением о том, что данные результатов проверок знаний
                 // данного слова для пользователя с данным профилем не найдены
                 response.setStatus(ResponseModel.FAIL_STATUS);
                 response.setMessage(String.format("Word test results for word #%d and profile #%d not found", wordId, profile.getId()));
+            }
+            return response;
+        });
+    }
+
+    @Override
+    public ResponseModel getWordStudyLessonTestResults(Authentication authentication, Long lessonId) throws Exception {
+        // создание пустого объекта модели ответа, содержимое которого будет определено ниже
+        ResponseModel response = new ResponseModel();
+        // получение результатов проверки знаний слова в контексте профиля текущего пользователя
+        return profileService.doInProfileContext(authentication, response, profile -> {
+            // попытка получить сущность с данными о результатах проверок знания слова
+            List<WordTestEntity> wordTestEntities =
+                    wordTestRepository.findByWordWordLessonIdAndProfileId(lessonId, profile.getId());
+            // если хотя бы одна сущность результатов проверок знаний слов получена
+            if (wordTestEntities.size() > 0) {
+                // создать пустую модель результатов
+                final WordTestModel wordTestModel =
+                        WordTestModel.builder()
+                                .attemptsNumber(0)
+                                .successNumber(0)
+                                .build();
+                // перебрать все объекты в списке
+                for (int i = 0; i < wordTestEntities.size(); i++) {
+                    // накопление в полях результатов проверки знаний урока по изучению слов
+                    // сумм значений из результатов проверки знаний каждого из слов урока
+                    wordTestModel.setAttemptsNumber(
+                        wordTestModel.getAttemptsNumber() + wordTestEntities.get(i).getAttemptsNumber()
+                    );
+                    wordTestModel.setSuccessNumber(
+                            wordTestModel.getSuccessNumber() + wordTestEntities.get(i).getSuccessNumber()
+                    );
+                }
+                // установить модель результатов с суммарными данными по уроку в модель ответа клиенту
+                response.setStatus(ResponseModel.SUCCESS_STATUS);
+                response.setMessage(
+                        String.format(
+                                "Word study lesson test results for lesson #%d and profile #%d",
+                                lessonId,
+                                profile.getId()
+                        )
+                );
+                response.setData(wordTestModel);
+            } else {
+                // объект модели ответа сервера с сообщением о том, что данные результатов проверок знаний
+                // данного слова для пользователя с данным профилем не найдены
+                response.setStatus(ResponseModel.FAIL_STATUS);
+                response.setMessage(
+                        String.format(
+                                "Word study lesson test results for lesson #%d and profile #%d not found",
+                                lessonId,
+                                profile.getId()
+                        )
+                );
             }
             return response;
         });

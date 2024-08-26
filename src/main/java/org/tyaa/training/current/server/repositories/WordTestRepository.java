@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.tyaa.training.current.server.entities.WordEntity;
 import org.tyaa.training.current.server.entities.WordTestEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -14,4 +15,5 @@ import java.util.Optional;
 public interface WordTestRepository extends JpaRepository<WordTestEntity, Long> {
 
     Optional<WordTestEntity> findWordTestEntityByWordIdAndProfileId(Long wordId, Long profileId);
+    List<WordTestEntity> findByWordWordLessonIdAndProfileId(Long lessonId, Long profileId);
 }
