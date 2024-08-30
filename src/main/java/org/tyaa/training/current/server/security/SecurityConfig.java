@@ -62,6 +62,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> httpSecurityExceptionHandlingConfigurer
                         .authenticationEntryPoint(restAuthenticationEntryPoint))
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
+                        // запросы к WEB SPA админ-панели разрешены всем
+                        .requestMatchers( "/", "/css/**", "/js/**").permitAll()
                         // запросы к конечным точкам авто-документации REST API любыми методами разрешены всем
                         .requestMatchers( "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         // запросы к стандартным конечным точкам SpringBoot обработки ошибок перед отправкой ответа клиенту разрешены всем любыми методами

@@ -1,4 +1,4 @@
-package org.tyaa.training.current.server.controllers;
+package org.tyaa.training.current.server.controllers.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.fge.jsonpatch.JsonPatch;

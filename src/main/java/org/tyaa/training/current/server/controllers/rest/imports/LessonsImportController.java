@@ -1,4 +1,4 @@
-package org.tyaa.training.current.server.controllers.imports;
+package org.tyaa.training.current.server.controllers.rest.imports;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

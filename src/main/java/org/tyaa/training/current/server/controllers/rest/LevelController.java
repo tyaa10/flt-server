@@ -1,4 +1,4 @@
-package org.tyaa.training.current.server.controllers;
+package org.tyaa.training.current.server.controllers.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
