@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.tyaa.training.current.server.entities.LanguageLevelEntity;
 import org.tyaa.training.current.server.entities.WordEntity;
 import org.tyaa.training.current.server.entities.WordLessonEntity;
+import org.tyaa.training.current.server.fileprocessing.spreadsheets.interfaces.ISpreadsheetFileReader;
 import org.tyaa.training.current.server.models.ResponseModel;
 import org.tyaa.training.current.server.models.imports.WordStudyImportModel;
 import org.tyaa.training.current.server.repositories.LanguageLevelRepository;
@@ -11,6 +12,8 @@ import org.tyaa.training.current.server.repositories.WordLessonRepository;
 import org.tyaa.training.current.server.repositories.WordRepository;
 import org.tyaa.training.current.server.services.interfaces.imports.ILessonsImportService;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -19,11 +22,13 @@ public class LessonImportService implements ILessonsImportService {
     private final WordLessonRepository wordLessonRepository;
     private final LanguageLevelRepository languageLevelRepository;
     private final WordRepository wordRepository;
+    private final ISpreadsheetFileReader spreadsheetFileReader;
 
-    public LessonImportService(WordLessonRepository wordLessonRepository, LanguageLevelRepository languageLevelRepository, WordRepository wordRepository) {
+    public LessonImportService(WordLessonRepository wordLessonRepository, LanguageLevelRepository languageLevelRepository, WordRepository wordRepository, ISpreadsheetFileReader spreadsheetFileReader) {
         this.wordLessonRepository = wordLessonRepository;
         this.languageLevelRepository = languageLevelRepository;
         this.wordRepository = wordRepository;
+        this.spreadsheetFileReader = spreadsheetFileReader;
     }
 
     @Override
@@ -77,5 +82,12 @@ public class LessonImportService implements ILessonsImportService {
                 .status(ResponseModel.SUCCESS_STATUS)
                 .message(String.format("%s WordStudy items imported", wordStudies.size()))
                 .build();
+    }
+
+    @Override
+    public ResponseModel importWordLessons(InputStream zipFileInputStream) throws IOException {
+        // Передать ссылку на поток ввода данных из файла архива службе заполнения списка моделей из файлов,
+        // и полученный от неё в ответ список передать методу импорта из списка
+        return importWordLessons(spreadsheetFileReader.readWordStudyFromZip(zipFileInputStream));
     }
 }

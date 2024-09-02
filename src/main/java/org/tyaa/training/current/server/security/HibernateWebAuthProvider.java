@@ -84,9 +84,6 @@ public class HibernateWebAuthProvider implements AuthenticationProvider, UserDet
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String name = a.getName();
         String password = a.getCredentials().toString();
-        System.out.println("***");
-        System.out.println(name + " : " + password);
-        System.out.println("***");
         UserEntity user = null;
         // пытка найти в БД учетную запись по имени пользователя
         try {
