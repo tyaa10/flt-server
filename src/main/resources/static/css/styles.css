@@ -40,7 +40,7 @@ body{
     bottom: -80px;
 }
 form{
-    height: 520px;
+    height: 550px;
     width: 400px;
     background-color: rgba(255,255,255,0.13);
     position: absolute;
@@ -119,4 +119,25 @@ button{
 }
 .social i{
   margin-right: 4px;
+}
+
+.form_status {
+    margin-top: 15px;
+    margin-bottom: -30px;
+}
+
+.success {
+    color: green;
+}
+
+.fail {
+    color: red;
+}
+
+.form_nav_bar {
+    margin: 15px;
+}
+
+.form_nav_bar a {
+    margin-left: 15px;
 }
