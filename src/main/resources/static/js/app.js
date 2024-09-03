@@ -1,14 +1,22 @@
 document.addEventListener('DOMContentLoaded', async () => {
+
+    /**
+    * Общая логика frontend
+    */
+
+    // Получить базовый адрес из мета-тега главного файла
     const contextPath = document.querySelector('meta[name="app-context-path"]').getAttribute('content');
-    // const text = await fetch(`${contextPath}/api/text`).then(response => response.text());
-    // document.querySelector('#app').innerHTML = `<h1>Context Path: ${contextPath}</h1>`;
+    // Проверить состояние аутентификации
     const isAuth = async () => {
         return (await fetch(`${contextPath}/api/auth/users/check`, {credentials: 'include'}).then(response => response.status)) === 200 ? true : false;
     }
-    const setPage = pageName => {
-        document.querySelector('#app').innerHTML = pageName
+    // Функция установки разметки текущего раздела в разметку главного файла
+    const setPage = page => {
+        document.querySelector('#app').innerHTML = page
     }
+    // Функция выдержки времени
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+    // Функция отображения состояния формы - текста и цвета (зелёный/красный)
     const showFormState = (elementObject, messageType, messageText) => {
         elementObject.innerHTML = messageText;
         if (messageType === 'success') {
@@ -22,6 +30,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             elementObject.classList.remove('fail')
         }
     }
+
+    /**
+    * Пары "представление + логика представления" разделов frontend
+    */
 
     const loginPage = `<!-- Login Page View -->
         <div class="background">
@@ -56,7 +68,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             fetch(event.target.action, {
                 method: form.method,
                 body: data,
-                /* headers: {'Content-Type': 'application/x-www-form-urlencoded'}, */
                 credentials: 'include'
             }).then(async response => {
                 if (response.ok) {
@@ -162,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="shape"></div>
             <div class="shape"></div>
         </div>
-        <form id="content-management_form" action="http://localhost:8090/lang-trainer/api/import/lessons/word-study/zip" method="POST">
+        <form id="content-management_form" action="${contextPath}/api/import/lessons/word-study/zip" method="POST">
             <h3>Content Management</h3>
             <label for="words-upload">Choose a words-import xlsx file:</label>
             <input type="file" id="words-upload" name="file" required />
@@ -177,11 +188,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const uploadPageScript = () => {
         const form = document.getElementById("content-management_form");
-        const signOut = document.getElementById('sign-out_button');
+        const signOut = document.getElementById('sign-out');
         const signOutAction = event => {
             event.preventDefault();
             const status = document.getElementById("sign-out_form_status");
-            fetch('http://localhost:8090/lang-trainer/logout').then(async response => {
+            fetch(`${contextPath}/logout`).then(async response => {
                 if (response.ok) {
                     setPage(loginPage);
                     loginPageScript();
@@ -230,12 +241,20 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         }
         form.addEventListener("submit", handleSubmit);
-        signOutButton.addEventListener("click", signOutAction);
+        signOut.addEventListener("click", signOutAction);
     }
 
+    /**
+    * Установка начального раздела frontend
+    */
+
+    // Если пользователь аутентифицирован
     if (await isAuth()) {
+        // Установить раздел управления содержимым системы (выгрузки файлов импорта данных)
         setPage(uploadPage)
+        uploadPageScript()
     } else {
+        // Установить раздел входа в учётную запись
         setPage(loginPage)
         loginPageScript()
     }
