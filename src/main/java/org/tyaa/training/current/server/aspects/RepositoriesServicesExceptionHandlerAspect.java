@@ -44,7 +44,7 @@ public class RepositoriesServicesExceptionHandlerAspect {
     /**
      * Обработка исключений в службах
      * */
-    @Around("execution(* org.tyaa.training.current.server.services.*.*(..))")
+    @Around("execution(* org.tyaa.training.current.server.services..*(..))")
     public Object onServiceMethodExecution(ProceedingJoinPoint pjp) {
         System.out.println("onServiceMethodExecution");
         Object output = null;
