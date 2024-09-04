@@ -92,8 +92,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/lessons/**").authenticated()
                         // запросы к конечной точке "проверки" любыми методами разрешены только аутентифицированным
                         .requestMatchers("/api/tests/**").authenticated()
-                        // TODO запросы к конечной точке "импорт" любыми методами разрешены всем (временно, в дальнейшем - разрешить только контент-менеджерам)
-                        .requestMatchers("/api/import/**").permitAll()
+                        // запросы к конечной точке "импорт" любыми методами разрешены только администраторам и управляющим содержимым
+                        .requestMatchers("/api/import/**").hasAnyRole("ADMIN", "CONTENT_MANAGER")
                         // запросы к любым конечным точкам, когда в пути есть секция "admin", разрешены только администраторам
                         .requestMatchers("/api/*/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

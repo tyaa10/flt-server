@@ -41,12 +41,18 @@ public class UserSeeder implements ISeeder {
         /* Обеспечение наличия в БД нескольких фейковых пользователей для отладки и тестирования приложения */
         RoleEntity adminRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.ADMIN.ordinal()));
         RoleEntity userRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.CUSTOMER.ordinal()));
+        RoleEntity contentManagerRole = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.CONTENT_MANAGER.ordinal()));
         users.forEach((userName, userPassword) -> userRepository.save(
                 UserEntity.builder()
                         .name(userName)
                         .password(passwordEncoder.encode(userPassword))
-                        .role(userName.equalsIgnoreCase(String.valueOf(IAuthService.ROLES.ADMIN)) ? adminRole : userRole)
-                        .build()
+                        .role(
+                                userName.contains(String.valueOf(IAuthService.ROLES.ADMIN).toLowerCase())
+                                        ? adminRole
+                                        : userName.contains(String.valueOf(IAuthService.ROLES.CONTENT_MANAGER).toLowerCase())
+                                            ? contentManagerRole
+                                            : userRole
+                        ).build()
         ));
     }
 }

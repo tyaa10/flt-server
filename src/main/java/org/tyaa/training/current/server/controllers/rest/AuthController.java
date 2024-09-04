@@ -120,6 +120,13 @@ public class AuthController {
         return new ResponseEntity<>(authService.makeUserAdmin(id), HttpStatus.OK);
     }
 
+    @Operation(summary = "Make the user a content manager by id")
+    @Secured("ROLE_ADMIN")
+    @PatchMapping(value = "/admin/users/{id}/make-content-manager")
+    public ResponseEntity<ResponseModel> makeUserContentManager(@PathVariable Long id) throws Exception {
+        return new ResponseEntity<>(authService.makeUserContentManager(id), HttpStatus.OK);
+    }
+
     @Operation(summary = "Check if the user is a guest or not")
     @GetMapping(value = "/users/check")
     // @ResponseBody

@@ -12,14 +12,15 @@ import java.util.List;
  * */
 public interface IAuthService {
     enum ROLES {
-        ADMIN, CUSTOMER
+        ADMIN, CUSTOMER, CONTENT_MANAGER
     }
     ResponseModel getRoles();
     ResponseModel createRole(RoleModel roleModel);
     ResponseModel getRoleUsers(Long roleId);
     ResponseModel createUser(UserModel userModel);
     ResponseModel deleteUser(Long id);
-    ResponseModel makeUserAdmin(Long id) throws Exception;
+    ResponseModel makeUserAdmin(Long id);
+    ResponseModel makeUserContentManager(Long id);
     /**
      * Получение подтверждения, что клиент сейчас аутентифицирован,
      * и возврат информации об учетной записи

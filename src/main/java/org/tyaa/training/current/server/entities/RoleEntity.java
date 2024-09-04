@@ -26,7 +26,7 @@ public class RoleEntity implements IEntity {
     private Long id;
 
     @Column(name = "name", nullable = false, unique = true)
-    @Size(min = 1, max = 16, message = "Value out of range [1; 16] characters")
+    @Size(min = 1, max = 25, message = "Value out of range [1; 25] characters")
     private String name;
 
     @OneToMany(mappedBy="role", fetch = FetchType.LAZY)

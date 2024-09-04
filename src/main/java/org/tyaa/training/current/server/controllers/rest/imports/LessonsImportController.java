@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,6 +34,7 @@ public class LessonsImportController {
     }
 
     @Operation(summary = "Import word study lessons data from JSON")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTENT_MANAGER"})
     @PostMapping("/word-study")
     public ResponseEntity<ResponseModel> importWordStudyLessons(@Valid @RequestBody List<WordStudyImportModel> wordStudyImportModel) {
         ResponseModel responseModel = lessonsImportService.importWordLessons(wordStudyImportModel);
@@ -47,6 +49,7 @@ public class LessonsImportController {
     }
 
     @Operation(summary = "Import word study lessons data from zip file with xlsx and media files inside")
+    @Secured({"ROLE_ADMIN", "ROLE_CONTENT_MANAGER"})
     @PostMapping(value = "/word-study/zip", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<ResponseModel> importWordStudyLessons(@ValidZipFile @RequestParam("file") MultipartFile file) throws IOException {
         ResponseModel responseModel;

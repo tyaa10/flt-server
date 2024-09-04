@@ -100,6 +100,7 @@ public class AuthService implements IAuthService {
         }
     }
 
+    @Override
     public ResponseModel deleteUser(Long id) {
         userRepository.deleteById(id);
         return ResponseModel.builder()
@@ -108,26 +109,17 @@ public class AuthService implements IAuthService {
                 .build();
     }
 
-    public ResponseModel makeUserAdmin(Long id) throws Exception {
-        // Получаем из БД объект роли администратора
-        RoleEntity role = roleRepository.findRoleByName(roles.get(IAuthService.ROLES.ADMIN.ordinal()));
-        Optional<UserEntity> userOptional = userRepository.findById(id);
-        if (userOptional.isPresent()){
-            UserEntity user = userOptional.get();
-            user.setRole(role);
-            userRepository.save(user);
-            return ResponseModel.builder()
-                    .status(ResponseModel.SUCCESS_STATUS)
-                    .message(String.format("Admin %s created successfully", user.getName()))
-                    .build();
-        } else {
-            return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("User #%d Not Found", id))
-                    .build();
-        }
+    @Override
+    public ResponseModel makeUserAdmin(Long id) {
+        return changeUserRole(id, ROLES.ADMIN);
     }
 
+    @Override
+    public ResponseModel makeUserContentManager(Long id) {
+        return changeUserRole(id, ROLES.CONTENT_MANAGER);
+    }
+
+    @Override
     public ResponseModel check(Authentication authentication) {
         ResponseModel response = new ResponseModel();
         // если пользователь из текущего http-сеанса аутентифицирован
@@ -151,6 +143,7 @@ public class AuthService implements IAuthService {
         return response;
     }
 
+    @Override
     public ResponseModel onSignOut() {
         return ResponseModel.builder()
                 .status(ResponseModel.SUCCESS_STATUS)
@@ -158,10 +151,35 @@ public class AuthService implements IAuthService {
                 .build();
     }
 
+    @Override
     public ResponseModel onError() {
         return ResponseModel.builder()
                 .status(ResponseModel.FAIL_STATUS)
                 .message("Auth error")
                 .build();
+    }
+
+    private ResponseModel changeUserRole(Long userId, ROLES newRole) {
+        // Получаем из БД объект сущности указанной роли
+        RoleEntity role = roleRepository.findRoleByName(roles.get(newRole.ordinal()));
+        // Получаем из БД объект сущности указанного пользователя
+        Optional<UserEntity> userOptional = userRepository.findById(userId);
+        // Если пользователь найден
+        if (userOptional.isPresent()){
+            UserEntity user = userOptional.get();
+            // установить пользователю указанную роль
+            user.setRole(role);
+            // сохранить изменение роли пользователя в БД
+            userRepository.save(user);
+            return ResponseModel.builder()
+                    .status(ResponseModel.SUCCESS_STATUS)
+                    .message(String.format("Content manager %s created successfully", user.getName()))
+                    .build();
+        } else {
+            return ResponseModel.builder()
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message(String.format("User #%d Not Found", userId))
+                    .build();
+        }
     }
 }
