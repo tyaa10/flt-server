@@ -11,9 +11,11 @@ import org.tyaa.training.current.server.validators.annotations.ValidZipFile;
  * */
 public class ZipFileValidator implements ConstraintValidator<ValidZipFile, MultipartFile> {
 
+    private String message;
+
     @Override
     public void initialize(ValidZipFile constraintAnnotation) {
-        // ConstraintValidator.super.initialize(constraintAnnotation);
+        message = constraintAnnotation.message();
     }
 
     @Override
@@ -23,6 +25,8 @@ public class ZipFileValidator implements ConstraintValidator<ValidZipFile, Multi
         final String contentType = multipartFile.getContentType();
         if (!isSupportedExtension(fileNameExtension) || !isSupportedContentType(contentType)) {
             result = false;
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate(message).addConstraintViolation();
         }
         return result;
     }
