@@ -7,6 +7,9 @@ server:
   port: 8090
   servlet:
     context-path: /lang-trainer
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 # ===============================
 # Relational Database - Postgres
 # Custom names:
