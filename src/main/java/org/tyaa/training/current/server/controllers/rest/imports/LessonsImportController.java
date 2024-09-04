@@ -6,11 +6,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.tyaa.training.current.server.models.ResponseModel;
 import org.tyaa.training.current.server.models.imports.WordStudyImportModel;
 import org.tyaa.training.current.server.services.interfaces.imports.ILessonsImportService;
+import org.tyaa.training.current.server.validators.annotations.ValidZipFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +48,7 @@ public class LessonsImportController {
 
     @Operation(summary = "Import word study lessons data from zip file with xlsx and media files inside")
     @PostMapping(value = "/word-study/zip", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ResponseModel> importWordStudyLessons(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<ResponseModel> importWordStudyLessons(@ValidZipFile @RequestParam("file") MultipartFile file) throws IOException {
         ResponseModel responseModel;
         // Загрузить данные полученного файла архива в поток ввода,
         // который будет автоматически закрыт по окончании работы с ним

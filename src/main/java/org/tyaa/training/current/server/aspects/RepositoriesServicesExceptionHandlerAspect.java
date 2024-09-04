@@ -63,12 +63,13 @@ public class RepositoriesServicesExceptionHandlerAspect {
 							.data(Arrays.asList(constraintViolationMessage))
                             .build();
         } catch (Exception ex) {
-            System.err.println("Unknown Error");
+            final String message = ex.getMessage() != null ? ex.getMessage() : "Unknown Server Error";
+            System.err.println(message);
             ex.printStackTrace();
             output =
                     ResponseModel.builder()
                             .status(ResponseModel.FAIL_STATUS)
-                            .message("Unknown Error")
+                            .message(message)
                             .build();
         } catch (Throwable throwable) {
             throwable.printStackTrace();

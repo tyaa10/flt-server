@@ -1,5 +1,6 @@
 package org.tyaa.training.current.server.fileprocessing.spreadsheets;
 
+import org.apache.coyote.BadRequestException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFShape;
@@ -44,8 +45,11 @@ public class ExcelFileReader implements ISpreadsheetFileReader {
 
     @Override
     public List<WordStudyImportModel> readWordStudyFromZip(InputStream zipFileInputStream) throws IOException {
-
-        return readWordStudy(zipFileReader.readSpreadsheetFileFromZip(zipFileInputStream), (learningLanguageName, wordTranslation) ->
+        final InputStream spreadsheetStream = zipFileReader.readSpreadsheetFileFromZip(zipFileInputStream);
+        if (spreadsheetStream == null) {
+            throw new BadRequestException("The spreadsheet file was not found in the provided zip archive");
+        }
+        return readWordStudy(spreadsheetStream, (learningLanguageName, wordTranslation) ->
         {
             try {
                 return getAudioFileBase64FromZip(learningLanguageName, wordTranslation);
