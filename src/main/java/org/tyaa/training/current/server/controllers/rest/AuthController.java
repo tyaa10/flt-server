@@ -116,20 +116,31 @@ public class AuthController {
     @Operation(summary = "Make the user an admin by id")
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/admin/users/{id}/makeadmin")
-    public ResponseEntity<ResponseModel> makeUserAdmin(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ResponseModel> makeUserAdmin(@PathVariable Long id) {
         return new ResponseEntity<>(authService.makeUserAdmin(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Make the user a content manager by id")
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/admin/users/{id}/make-content-manager")
-    public ResponseEntity<ResponseModel> makeUserContentManager(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ResponseModel> makeUserContentManager(@PathVariable Long id) {
         return new ResponseEntity<>(authService.makeUserContentManager(id), HttpStatus.OK);
     }
 
     @Operation(summary = "Check if the user is a guest or not")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User <username> Signed In",
+                    content = @Content(schema = @Schema(implementation = CheckUserResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "User is a Guest",
+                    content = @Content(schema = @Schema())
+            )
+    })
     @GetMapping(value = "/users/check")
-    // @ResponseBody
     /** @param authentication объект стандартного типа с данными учетной записи
      * пользователя теущего http-сеанса, если ранее произошла успешная аутентификация,
      * получается внедрением зависимости через аргумент метода */
@@ -161,4 +172,11 @@ public class AuthController {
      * на запрос всех ролей
      * */
     private class GetRolesResponseModel extends ResponseModel<List<RoleModel>> {}
+
+    /**
+     * Технический класс для автоматической документации,
+     * задающий точный тип данных ответа сервера
+     * на запрос состояния аутентификации клиента
+     * */
+    private class CheckUserResponseModel extends ResponseModel<UserModel> {}
 }

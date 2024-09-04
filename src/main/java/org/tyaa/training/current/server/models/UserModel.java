@@ -2,6 +2,7 @@ package org.tyaa.training.current.server.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,7 @@ public class UserModel implements IModel {
      * */
     @NotBlank(message = "Password is required")
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)(?!.* ).{8,16}$", message = "Password must contain one digit from 0 to 9, one lowercase letter, one uppercase letter, one special character, no space, and it must be 8-16 characters long")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     /**
      * Идентификатор роли
