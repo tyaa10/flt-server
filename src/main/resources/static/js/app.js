@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         navToSignUp.addEventListener("click", navToSignUpAction)
     }
 
-    const registrationPage = `<!-- Registration Page View and Script -->
+    const registrationPage = `<!-- Registration Page View -->
         <div class="background">
             <div class="shape"></div>
             <div class="shape"></div>
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         navToSignIn.addEventListener("click", navToSignInAction);
     }
 
-    const uploadPage = `
+    const uploadPage = `<!-- Upload Page View -->
         <div class="background">
             <div class="shape"></div>
             <div class="shape"></div>
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         </form>
     `
 
-    const uploadPageScript = () => {
+    const uploadPageScript = () => { /* Upload Page Script */
         const form = document.getElementById("content-management_form");
         const signOut = document.getElementById('sign-out');
         const signOutAction = event => {
@@ -197,11 +197,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                     setPage(loginPage);
                     loginPageScript();
                 } else {
-                    if (Object.hasOwn(data, 'message')) {
-                        showFormState(status, 'fail', data["message"]);
-                    } else {
-                        showFormState(status, 'fail', 'Unknown server error');
-                    }
+                    response.json().then(data => {
+                        if (Object.hasOwn(data, 'message')) {
+                            showFormState(status, 'fail', data["message"]);
+                        } else {
+                            showFormState(status, 'fail', 'Unknown server error');
+                        }
+                    });
                 }
             }).catch(error => {
                 showFormState(status, 'fail', 'There was a problem performing logout');

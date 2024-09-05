@@ -78,9 +78,71 @@ public class AuthController {
         );
     }
 
+    @Operation(summary = "Get all users")
+    @Secured("ROLE_ADMIN")
+    @GetMapping("/admin/users")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Roles successfully retrieved",
+                    content = @Content(schema = @Schema(implementation = GetUsersResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden (administrator rights required)",
+                    content = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "502",
+                    description = "Bad Gateway",
+                    content = @Content(schema = @Schema())
+            )
+    })
+    public ResponseEntity<ResponseModel> getUsers() {
+        ResponseModel responseModel = authService.getUsers();
+        return new ResponseEntity<>(
+                responseModel,
+                (responseModel.getData() != null)
+                        ? HttpStatus.OK
+                        : HttpStatus.BAD_GATEWAY
+        );
+    }
+
     @Operation(summary = "Get users with specific role id")
     @Secured("ROLE_ADMIN")
     @GetMapping("/admin/roles/{id}/users")
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Roles successfully retrieved",
+                    content = @Content(schema = @Schema(implementation = GetUsersResponseModel.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Unauthorized",
+                    content = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Forbidden (administrator rights required)",
+                    content = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Role not found",
+                    content = @Content(schema = @Schema())
+            ),
+            @ApiResponse(
+                    responseCode = "502",
+                    description = "Bad Gateway",
+                    content = @Content(schema = @Schema())
+            )
+    })
     public ResponseEntity<ResponseModel> getUsersByRole(@PathVariable Long id) {
         ResponseModel responseModel =
                 authService.getRoleUsers(id);
@@ -113,18 +175,11 @@ public class AuthController {
         return new ResponseEntity<>(authService.deleteUser(id), HttpStatus.NO_CONTENT);
     }
 
-    @Operation(summary = "Make the user an admin by id")
+    @Operation(summary = "Change user role")
     @Secured("ROLE_ADMIN")
-    @PatchMapping(value = "/admin/users/{id}/makeadmin")
-    public ResponseEntity<ResponseModel> makeUserAdmin(@PathVariable Long id) {
-        return new ResponseEntity<>(authService.makeUserAdmin(id), HttpStatus.OK);
-    }
-
-    @Operation(summary = "Make the user a content manager by id")
-    @Secured("ROLE_ADMIN")
-    @PatchMapping(value = "/admin/users/{id}/make-content-manager")
-    public ResponseEntity<ResponseModel> makeUserContentManager(@PathVariable Long id) {
-        return new ResponseEntity<>(authService.makeUserContentManager(id), HttpStatus.OK);
+    @PatchMapping(value = "/admin/users/{userId}/change-role/{newRoleId}")
+    public ResponseEntity<ResponseModel> makeUserAdmin(@PathVariable Long userId, @PathVariable Long newRoleId) {
+        return new ResponseEntity<>(authService.changeUserRole(userId, newRoleId), HttpStatus.OK);
     }
 
     @Operation(summary = "Check if the user is a guest or not")
@@ -179,4 +234,11 @@ public class AuthController {
      * на запрос состояния аутентификации клиента
      * */
     private class CheckUserResponseModel extends ResponseModel<UserModel> {}
+
+    /**
+     * Технический класс для автоматической документации,
+     * задающий точный тип данных ответа сервера
+     * на запрос списка пользователей
+     * */
+    private class GetUsersResponseModel extends ResponseModel<List<UserModel>> {}
 }

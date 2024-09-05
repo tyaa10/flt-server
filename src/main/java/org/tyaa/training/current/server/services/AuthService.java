@@ -35,6 +35,15 @@ public class AuthService implements IAuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public static UserModel entityToModel(UserEntity userEntity) {
+        return UserModel.builder()
+                .id(userEntity.getId())
+                .name(userEntity.getName())
+                .roleId(userEntity.getRole().getId())
+                .roleName(userEntity.getRole().getName())
+                .build();
+    }
+
     @Override
     public ResponseModel getRoles() {
         return ResponseModel.builder()
@@ -74,19 +83,24 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    public ResponseModel getUsers() {
+        List<UserModel> userModels =
+                userRepository.findAll().stream().map(AuthService::entityToModel).toList();
+        return ResponseModel.builder()
+                .status(ResponseModel.SUCCESS_STATUS)
+                .message("Users retrieved successfully")
+                .data(userModels)
+                .build();
+    }
+
+    @Override
     @Transactional
     public ResponseModel getRoleUsers(Long roleId) {
         Optional<RoleEntity> roleOptional = roleRepository.findById(roleId);
         if (roleOptional.isPresent()) {
             RoleEntity role = roleOptional.get();
             List<UserModel> userModels =
-                    role.getUsers().stream().map(user ->
-                                    UserModel.builder()
-                                            .name(user.getName())
-                                            .roleId(user.getRole().getId())
-                                            .build()
-                            )
-                            .collect(Collectors.toList());
+                    role.getUsers().stream().map(AuthService::entityToModel).toList();
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("List of %s Role Users Retrieved Successfully", role.getName()))
@@ -110,13 +124,36 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public ResponseModel makeUserAdmin(Long id) {
-        return changeUserRole(id, ROLES.ADMIN);
-    }
-
-    @Override
-    public ResponseModel makeUserContentManager(Long id) {
-        return changeUserRole(id, ROLES.CONTENT_MANAGER);
+    public ResponseModel changeUserRole(Long userId, Long newRoleId) {
+        // Получаем из БД объект сущности указанной роли
+        Optional<RoleEntity> roleEntityOptional = roleRepository.findById(newRoleId);
+        if (roleEntityOptional.isPresent()) {
+            RoleEntity roleEntity = roleEntityOptional.get();
+            // Получаем из БД объект сущности указанного пользователя
+            Optional<UserEntity> userOptional = userRepository.findById(userId);
+            // Если пользователь найден
+            if (userOptional.isPresent()) {
+                UserEntity user = userOptional.get();
+                // установить пользователю указанную роль
+                user.setRole(roleEntity);
+                // сохранить изменение роли пользователя в БД
+                userRepository.save(user);
+                return ResponseModel.builder()
+                        .status(ResponseModel.SUCCESS_STATUS)
+                        .message(String.format("User %s role changed to %s successfully", user.getName(), roleEntity.getName()))
+                        .build();
+            } else {
+                return ResponseModel.builder()
+                        .status(ResponseModel.FAIL_STATUS)
+                        .message(String.format("User #%d Not Found", userId))
+                        .build();
+            }
+        } else {
+            return ResponseModel.builder()
+                    .status(ResponseModel.FAIL_STATUS)
+                    .message(String.format("User role not changed: Role #%d Not Found", newRoleId))
+                    .build();
+        }
     }
 
     @Override
@@ -157,29 +194,5 @@ public class AuthService implements IAuthService {
                 .status(ResponseModel.FAIL_STATUS)
                 .message("Auth error")
                 .build();
-    }
-
-    private ResponseModel changeUserRole(Long userId, ROLES newRole) {
-        // Получаем из БД объект сущности указанной роли
-        RoleEntity role = roleRepository.findRoleByName(roles.get(newRole.ordinal()));
-        // Получаем из БД объект сущности указанного пользователя
-        Optional<UserEntity> userOptional = userRepository.findById(userId);
-        // Если пользователь найден
-        if (userOptional.isPresent()){
-            UserEntity user = userOptional.get();
-            // установить пользователю указанную роль
-            user.setRole(role);
-            // сохранить изменение роли пользователя в БД
-            userRepository.save(user);
-            return ResponseModel.builder()
-                    .status(ResponseModel.SUCCESS_STATUS)
-                    .message(String.format("Content manager %s created successfully", user.getName()))
-                    .build();
-        } else {
-            return ResponseModel.builder()
-                    .status(ResponseModel.FAIL_STATUS)
-                    .message(String.format("User #%d Not Found", userId))
-                    .build();
-        }
     }
 }

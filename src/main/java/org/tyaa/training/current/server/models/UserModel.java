@@ -22,6 +22,10 @@ import org.tyaa.training.current.server.models.interfaces.IModel;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserModel implements IModel {
     /**
+     * Локально уникальный идентификатор
+     * */
+    public Long id;
+    /**
      * Логин
      * */
     @NotBlank(message = "Username is required")

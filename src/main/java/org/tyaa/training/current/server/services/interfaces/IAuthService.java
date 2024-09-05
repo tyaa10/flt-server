@@ -16,11 +16,11 @@ public interface IAuthService {
     }
     ResponseModel getRoles();
     ResponseModel createRole(RoleModel roleModel);
+    ResponseModel getUsers();
     ResponseModel getRoleUsers(Long roleId);
     ResponseModel createUser(UserModel userModel);
     ResponseModel deleteUser(Long id);
-    ResponseModel makeUserAdmin(Long id);
-    ResponseModel makeUserContentManager(Long id);
+    ResponseModel changeUserRole(Long userId, Long newRoleId);
     /**
      * Получение подтверждения, что клиент сейчас аутентифицирован,
      * и возврат информации об учетной записи
