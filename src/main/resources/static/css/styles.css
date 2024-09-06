@@ -39,6 +39,89 @@ body{
     right: -30px;
     bottom: -80px;
 }
+h1, h2 {
+    color: #ffffff;
+}
+h1 {
+    position: fixed;
+	top: 40px;
+	left: 40px;
+}
+h2 {
+    margin: 15px;
+}
+.account_nav_bar {
+    margin: 15px;
+    position: fixed;
+	top: 40px;
+	right: 40px;
+}
+.account_nav_bar *{
+    font-family: 'Poppins',sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+.account_nav_bar a {
+    margin-left: 15px;
+}
+.panel {
+    height: auto;
+    overflow: hidden;
+    background-color: rgba(255,255,255,0.13);
+    position: absolute;
+    transform: translate(-50%,-50%);
+    top: 50%;
+    left: 50%;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+    padding: 50px 35px;
+    padding-bottom: 150px;
+}
+.panel *{
+    font-family: 'Poppins',sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    outline: none;
+    border: none;
+}
+table {
+    margin: 15px;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #080710;
+    min-width: 160px;
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+    padding: 12px 16px;
+    z-index: 1;
+
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 40px rgba(8,7,16,0.6);
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown-content > p {
+    padding: 5px;
+}
+.dropdown-content > p:hover {
+    background-color: rgba(255,255,255,0.1);
+}
 form{
     height: 550px;
     width: 400px;
