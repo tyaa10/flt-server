@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.tyaa.training.current.server.models.LanguageModel;
 import org.tyaa.training.current.server.models.ResponseModel;
@@ -27,12 +28,14 @@ public class LanguageController {
     }
 
     @Operation(summary = "Get all languages")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping
     public ResponseEntity<ResponseModel> getLanguages() {
         return new ResponseEntity<>(languageService.getLanguages(), HttpStatus.OK);
     }
 
     @Operation(summary = "Create a new language")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @PostMapping
     public ResponseEntity<ResponseModel> createLanguage(@RequestBody LanguageModel languageModel) {
         ResponseModel responseModel = languageService.createLanguage(languageModel);
@@ -47,6 +50,7 @@ public class LanguageController {
     }
 
     @Operation(summary = "Delete language by id")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @DeleteMapping(value = "{id}")
     public ResponseEntity<ResponseModel> deleteLanguage(@PathVariable Long id) {
         return new ResponseEntity<>(languageService.deleteLanguage(id), HttpStatus.NO_CONTENT);

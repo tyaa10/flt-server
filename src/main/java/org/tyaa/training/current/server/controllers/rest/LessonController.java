@@ -36,7 +36,7 @@ public class LessonController {
     }
 
     @Operation(summary = "Get lesson list items for current language-level combination")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping("/list-items")
     @ApiResponses(value = {
             @ApiResponse(

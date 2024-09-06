@@ -37,7 +37,7 @@ public class WordTestController {
     }
 
     @Operation(summary = "Get the user's knowledge test results for a word")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping("/words/{id}/results")
     @ApiResponses(value = {
             @ApiResponse(
@@ -75,7 +75,7 @@ public class WordTestController {
     }
 
     @Operation(summary = "Get the user's knowledge test results for a word study lesson")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping("/lessons/{id}/results")
     @ApiResponses(value = {
             @ApiResponse(
@@ -113,7 +113,7 @@ public class WordTestController {
     }
 
     @Operation(summary = "Create a result record for the user's word knowledge test")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @PostMapping("/words/{id}/results")
     @ApiResponses(value = {
             @ApiResponse(
@@ -160,7 +160,7 @@ public class WordTestController {
     }
 
     @Operation(summary = "Update the results of a user's word knowledge test")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     // явное задание типа принимаемых данных - JSON со стандартной структурой обновления "JSON Patch"
     @PatchMapping(path = "/results/{id}", consumes = "application/json-patch+json")
     @ApiResponses(value = {
@@ -195,7 +195,7 @@ public class WordTestController {
     }
 
     @Operation(summary = "Add the result of the word knowledge test")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @PostMapping("/words/{id}/results/add")
     @ApiResponses(value = {
             @ApiResponse(

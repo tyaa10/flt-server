@@ -59,7 +59,7 @@ public class UserProfileController {
     }
 
     @Operation(summary = "Create a new profile for current user")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @PostMapping("/profiles")
     @ApiResponses(value = {
             @ApiResponse(
@@ -98,7 +98,7 @@ public class UserProfileController {
     }
 
     @Operation(summary = "Get current user profile")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping("/profiles/current")
     public ResponseEntity<ResponseModel> getProfile(Authentication authentication) {
         ResponseModel responseModel = profileService.getCurrentUserProfile(authentication);

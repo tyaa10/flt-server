@@ -33,7 +33,7 @@ public class WordController {
     }
 
     @Operation(summary = "Get word models for a specific word study lesson")
-    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER"})
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @GetMapping("/{id}/words")
     @ApiResponses(value = {
             @ApiResponse(
@@ -58,6 +58,7 @@ public class WordController {
     }
 
     @Operation(summary = "Delete word-study lesson words")
+    @Secured({"ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER"})
     @DeleteMapping(value = "/{id}/words")
     public ResponseEntity<ResponseModel> deleteWordLessonWords(@PathVariable("id") Long wordLessonId) {
         return new ResponseEntity<>(
