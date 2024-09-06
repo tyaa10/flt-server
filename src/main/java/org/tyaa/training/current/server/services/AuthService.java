@@ -14,6 +14,7 @@ import org.tyaa.training.current.server.services.interfaces.IAuthService;
 import org.tyaa.training.current.server.entities.UserEntity;
 import org.tyaa.training.current.server.entities.RoleEntity;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -85,7 +86,10 @@ public class AuthService implements IAuthService {
     @Override
     public ResponseModel getUsers() {
         List<UserModel> userModels =
-                userRepository.findAll().stream().map(AuthService::entityToModel).toList();
+                userRepository.findAll().stream()
+                        .map(AuthService::entityToModel)
+                        .sorted(Comparator.comparing(UserModel::getId))
+                        .toList();
         return ResponseModel.builder()
                 .status(ResponseModel.SUCCESS_STATUS)
                 .message("Users retrieved successfully")
@@ -100,7 +104,10 @@ public class AuthService implements IAuthService {
         if (roleOptional.isPresent()) {
             RoleEntity role = roleOptional.get();
             List<UserModel> userModels =
-                    role.getUsers().stream().map(AuthService::entityToModel).toList();
+                    role.getUsers().stream()
+                            .map(AuthService::entityToModel)
+                            .sorted(Comparator.comparing(UserModel::getId))
+                            .toList();
             return ResponseModel.builder()
                     .status(ResponseModel.SUCCESS_STATUS)
                     .message(String.format("List of %s Role Users Retrieved Successfully", role.getName()))

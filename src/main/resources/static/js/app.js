@@ -271,10 +271,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                     response.json().then(data => {
                         if (Object.hasOwn(data, 'message')) {
                             showFormState(status, 'fail', data["message"]);
+                        } else if (Object.hasOwn(data, 'status') && data["status"] === 400) {
+                            showFormState(status, 'fail', 'Wrong file');
                         } else {
                             showFormState(status, 'fail', 'Unknown server error');
                         }
-                    })
+                    });
                 }
             }).catch(error => {
                 showFormState(status, 'fail', 'There was a problem submitting word lesson data');
