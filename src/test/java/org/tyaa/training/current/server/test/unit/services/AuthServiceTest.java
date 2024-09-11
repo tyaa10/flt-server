@@ -28,17 +28,13 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
+import org.tyaa.training.current.server.test.dataproviders.RoleProvider;
+
 /**
  * Модульный тест службы AuthService
  * */
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
-
-    /**
-     * Тестовые данные
-     * */
-    private final List<String> AVAILABLE_ROLES =
-            List.of("ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER");
 
     /*
     * Макеты зависимостей для внедрения в службу AuthService
@@ -69,17 +65,12 @@ public class AuthServiceTest {
 
     @Test
     void getRolesTest() {
-        // 1. Дано
-        // 1.1 входящие данные
-        final List<RoleEntity> roleEntities =
-                AVAILABLE_ROLES.stream()
-                        .map(roleName -> RoleEntity.builder().name(roleName).build())
-                        .toList();
-        // 1.2 поведение зависимостей
+        // 1. Дано: входящие данные и поведение зависимостей
+        final List<RoleEntity> roleEntities = RoleProvider.getAvailableRoleEntities();
         when(roleRepository.findAll()).thenReturn(roleEntities);
         // 2. Вызов тестируемого метода
         ResponseModel responseModel = authService.getRoles();
-        // 3. Проверки результатов выполнения тестируемого метода
+        // 3. Проверки результатов выполнения
         assertEquals(responseModel.getStatus(), ResponseModel.SUCCESS_STATUS);
         final List<RoleModel> roleModels = (List<RoleModel>) responseModel.getData();
         for (int i = 0; i < roleModels.size(); i++) {
@@ -102,7 +93,7 @@ public class AuthServiceTest {
         UserModel userModel = new UserModel();
         userModel.name = "test";
         userModel.setPassword("test");
-        ReflectionTestUtils.setField(authService, "roles", AVAILABLE_ROLES);
+        ReflectionTestUtils.setField(authService, "roles", RoleProvider.AVAILABLE_ROLES);
         when(roleRepository.findRoleByName("ROLE_CUSTOMER")).thenReturn(new RoleEntity());
         when(passwordEncoder.encode(any())).thenReturn("test");
         when(userRepository.save(any())).thenReturn(new UserEntity());

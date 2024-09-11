@@ -1,0 +1,2 @@
+new-fake-user,User new-fake-user created,CREATED,success
+existing-fake-u,This name is already taken,CONFLICT,fail

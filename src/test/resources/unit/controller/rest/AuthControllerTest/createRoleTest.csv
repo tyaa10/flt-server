@@ -1,0 +1,2 @@
+ROLE_FAKE_NEW,Role ROLE_FAKE_NEW created,CREATED,success
+ROLE_FAKE_EXISTING,This name is already taken,CONFLICT,fail
