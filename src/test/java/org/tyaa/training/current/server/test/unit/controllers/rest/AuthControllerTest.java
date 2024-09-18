@@ -66,7 +66,7 @@ public class AuthControllerTest {
      * @param responseModelStatus Статус в теле ответа, который должен быть возвращен
      * */
     @ParameterizedTest
-    @CsvFileSource(resources = "/unit/controller/rest/AuthControllerTest/createRoleTest.csv")
+    @CsvFileSource(resources = "/unit/controllers/rest/AuthControllerTest/createRoleTest.csv")
     void createRoleTest(String givenRoleName, String responseModelMessage, String responseEntityStatus, String responseModelStatus) {
         final RoleModel roleModel = new RoleModel();
         roleModel.name = givenRoleName;
@@ -84,7 +84,7 @@ public class AuthControllerTest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/unit/controller/rest/AuthControllerTest/createUserTest.csv")
+    @CsvFileSource(resources = "/unit/controllers/rest/AuthControllerTest/createUserTest.csv")
     void createUserTest(String givenUserName, String responseModelMessage, String responseEntityStatus, String responseModelStatus) {
         final UserModel userModel = new UserModel();
         userModel.name = givenUserName;
@@ -141,12 +141,12 @@ public class AuthControllerTest {
     void changeUserRoleTest() {
         when(authService.changeUserRole(any(), any()))
                 .thenReturn(ResponseModel.builder().status(ResponseModel.SUCCESS_STATUS).build());
-        ResponseModel responseModel = authController.makeUserAdmin(1L, 1L).getBody();
+        ResponseModel responseModel = authController.changeUserRole(1L, 1L).getBody();
         assertEquals(responseModel.getStatus(), ResponseModel.SUCCESS_STATUS);
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/unit/controller/rest/AuthControllerTest/checkUserTest.csv")
+    @CsvFileSource(resources = "/unit/controllers/rest/AuthControllerTest/checkUserTest.csv")
     void checkUserTest(boolean isClientAuthenticated, String responseEntityStatus) {
         UserModel userModel = null;
         when(authService.check(any()))

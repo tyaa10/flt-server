@@ -170,6 +170,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Delete user by id")
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping(value = "/users/{id}")
     public ResponseEntity<ResponseModel> deleteUser(@PathVariable Long id) {
         return new ResponseEntity<>(authService.deleteUser(id), HttpStatus.NO_CONTENT);
@@ -178,7 +179,7 @@ public class AuthController {
     @Operation(summary = "Change user role")
     @Secured("ROLE_ADMIN")
     @PatchMapping(value = "/admin/users/{userId}/change-role/{newRoleId}")
-    public ResponseEntity<ResponseModel> makeUserAdmin(@PathVariable Long userId, @PathVariable Long newRoleId) {
+    public ResponseEntity<ResponseModel> changeUserRole(@PathVariable Long userId, @PathVariable Long newRoleId) {
         return new ResponseEntity<>(authService.changeUserRole(userId, newRoleId), HttpStatus.OK);
     }
 

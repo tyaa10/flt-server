@@ -49,7 +49,7 @@ public class AuthService implements IAuthService {
     public ResponseModel getRoles() {
         return ResponseModel.builder()
                 .status(ResponseModel.SUCCESS_STATUS)
-                .message("All the roles fetched successfully")
+                .message("Roles successfully retrieved")
                 .data(roleRepository.findAll().stream()
                         .map(roleEntity -> RoleModel.builder()
                                 .id(roleEntity.getId())
@@ -84,6 +84,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    @Transactional
     public ResponseModel getUsers() {
         List<UserModel> userModels =
                 userRepository.findAll().stream()
@@ -131,6 +132,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
+    @Transactional
     public ResponseModel changeUserRole(Long userId, Long newRoleId) {
         // Получаем из БД объект сущности указанной роли
         Optional<RoleEntity> roleEntityOptional = roleRepository.findById(newRoleId);
@@ -147,7 +149,7 @@ public class AuthService implements IAuthService {
                 userRepository.save(user);
                 return ResponseModel.builder()
                         .status(ResponseModel.SUCCESS_STATUS)
-                        .message(String.format("User %s role changed to %s successfully", user.getName(), roleEntity.getName()))
+                        .message(String.format("%s user role successfully changed to %s", user.getName(), roleEntity.getName()))
                         .build();
             } else {
                 return ResponseModel.builder()

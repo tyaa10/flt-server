@@ -1,0 +1,5 @@
+abc,Abcdef1%,User %s created
+abc,Abcdef1%,Unique index or primary key violation
+abcdefghijklmnop,Abcdef1%,User %s created
+abcd,,rawPassword cannot be null
+abcdefghijklmnopq,Abcdef1%,Value too long

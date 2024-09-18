@@ -20,18 +20,16 @@ server:
 # ===============================
 spring:
   config:
-    import: optional:file:local.env[.properties]
+    import: optional:file:local-test.env[.properties]
   datasource:
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.h2.Driver
     url: ${DB_URL}
-    username: ${PG_USER}
-    password: ${PG_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
     show-sql: true
   context:
     expression:

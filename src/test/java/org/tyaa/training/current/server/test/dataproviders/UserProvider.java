@@ -16,8 +16,9 @@ public class UserProvider {
     public static UserEntity getUserEntity() {
         return UserEntity.builder()
                 .id(faker.number().numberBetween(1L, 10L))
-                .name(faker.name().firstName())
-                .role(RoleProvider.getRoleEntity())
+                .name(faker.internet().password(3, 16,false, false, false))
+                .password(faker.internet().password(8, 16, true, true, true))
+                .role(RoleProvider.getRandomAvailableRoleEntity())
                 .build();
     }
 
@@ -35,6 +36,7 @@ public class UserProvider {
         return UserModel.builder()
                 .id(userEntity.getId())
                 .name(userEntity.getName())
+                .password(userEntity.getPassword())
                 .roleId(userEntity.getRole().getId())
                 .roleName(userEntity.getRole().getName())
                 .build();

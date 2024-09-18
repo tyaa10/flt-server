@@ -16,10 +16,19 @@ public class RoleProvider {
     public static final List<String> AVAILABLE_ROLES =
             List.of("ROLE_ADMIN", "ROLE_CUSTOMER", "ROLE_CONTENT_MANAGER");
 
-    public static RoleEntity getRoleEntity() {
+    public static RoleEntity getRandomAvailableRoleEntity() {
         return RoleEntity.builder()
                 .id(faker.number().numberBetween(1L, 100L))
                 .name(faker.options().option(AVAILABLE_ROLES).getFirst()).build();
+    }
+
+    public static RoleEntity getRoleEntity() {
+        return RoleEntity.builder()
+                .id(faker.number().numberBetween(1L, 100L))
+                .name("ROLE_" + faker.internet()
+                        .password(3, 8, false, false, false)
+                        .toUpperCase()
+                ).build();
     }
 
     public static List<RoleEntity> getAvailableRoleEntities() {
@@ -30,11 +39,19 @@ public class RoleProvider {
                 ).toList();
     }
 
+    public static RoleModel getAvailableRoleModel() {
+        final RoleEntity roleEntity = getRandomAvailableRoleEntity();
+        return RoleModel.builder()
+                .id(roleEntity.getId())
+                .name(roleEntity.getName()).build();
+    }
+
     public static RoleModel getRoleModel() {
         final RoleEntity roleEntity = getRoleEntity();
         return RoleModel.builder()
                 .id(roleEntity.getId())
-                .name(roleEntity.getName()).build();}
+                .name(roleEntity.getName()).build();
+    }
 
     public static List<RoleModel> getAvailableRoleModels() {
         return getAvailableRoleEntities().stream().map(
