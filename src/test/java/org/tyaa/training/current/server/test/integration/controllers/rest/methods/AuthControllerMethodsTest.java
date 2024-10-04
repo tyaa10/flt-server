@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Интеграционный тест контроллера AuthController на уровне методов
  */
 @SpringBootTest
-public class AuthControllerTest {
+public class AuthControllerMethodsTest {
 
     @Autowired
     private AuthController authController;

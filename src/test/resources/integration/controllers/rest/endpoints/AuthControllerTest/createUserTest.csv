@@ -1,0 +1,5 @@
+abc,Abcdef1%,201,User %s created
+abc,Abcdef1%,502,Unique index or primary key violation
+abcdefghijklmnop,Abcdef1%,201,User %s created
+abcd,,400,Password must contain one digit from 0 to 9
+abcdefghijklmnopq,Abcdef1%,400,Username can contain digits

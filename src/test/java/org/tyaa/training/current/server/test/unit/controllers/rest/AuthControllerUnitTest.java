@@ -29,7 +29,7 @@ import static org.tyaa.training.current.server.test.dataproviders.UserProvider.g
  * Модульный тест контроллера AuthController
  * */
 @ExtendWith(MockitoExtension.class)
-public class AuthControllerTest {
+public class AuthControllerUnitTest {
 
     @Mock
     private IAuthService authService;

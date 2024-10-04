@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.tyaa.training.current.server.models.ResponseModel;
 import org.tyaa.training.current.server.models.RoleModel;
@@ -156,7 +157,7 @@ public class AuthController {
 
     @Operation(summary = "Create a new user")
     @PostMapping("/users")
-    public ResponseEntity<ResponseModel> createUser(@Valid @RequestBody UserModel userModel) {
+    public ResponseEntity<ResponseModel> createUser(@Validated @RequestBody UserModel userModel) {
         ResponseModel responseModel =
                 authService.createUser(userModel);
         return new ResponseEntity<>(
