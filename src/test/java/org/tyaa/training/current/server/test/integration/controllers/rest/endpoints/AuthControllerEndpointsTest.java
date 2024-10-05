@@ -159,7 +159,7 @@ public class AuthControllerEndpointsTest {
     }
 
     @Nested
-    class GetUserByIdTest {
+    class CreateUserTest {
 
         @ParameterizedTest
         @CsvFileSource(resources = "/integration/controllers/rest/endpoints/AuthControllerTest/createUserTest.csv")
@@ -209,12 +209,65 @@ public class AuthControllerEndpointsTest {
         }
     }
 
-    @Test
-    public void makeUserAdminTest() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.patch("/api/auth/admin/users/1/change-role/2")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("User role successfully changed")));
+    @Nested
+    class ChangeUserRoleTestCases {
+
+        private void changeUserRoleTest(
+                Long newRoleId,
+                ResultMatcher expectedStatus,
+                ResultMatcher expectedContent
+        ) throws Exception {
+            AuthControllerEndpointsTest.this.mockMvc
+                    .perform(
+                            MockMvcRequestBuilders.patch(format("/api/auth/admin/users/2/change-role/%s", newRoleId))
+                                .accept(MediaType.APPLICATION_JSON)
+                    ).andExpect(expectedStatus)
+                    .andExpect(expectedContent);
+        }
+
+        @Test
+        @WithMockUser(username = "admin", roles = { "ADMIN" })
+        public void givenAdminUserAuthenticated_whenChangeUserRole_thenOk() throws Exception {
+            changeUserRoleTest(
+                    3L,
+                    status().isOk(),
+                    content().string(containsString("user role successfully changed to"))
+            );
+            changeUserRoleTest(
+                    2L,
+                    status().isOk(),
+                    content().string(containsString("user role successfully changed to"))
+            );
+        }
+
+        @Test
+        @WithMockUser(username = "one", roles = { "CUSTOMER" })
+        public void givenCustomerUserAuthenticated_whenChangeUserRole_thenForbidden() throws Exception {
+            changeUserRoleTest(
+                    3L,
+                    status().isForbidden(),
+                    content().string(containsString(""))
+            );
+            changeUserRoleTest(
+                    2L,
+                    status().isForbidden(),
+                    content().string(containsString(""))
+            );
+        }
+
+        @Test
+        public void givenNoUser_whenChangeUserRole_thenUnauthorized() throws Exception {
+            changeUserRoleTest(
+                    3L,
+                    status().isUnauthorized(),
+                    content().string(containsString(""))
+            );
+            changeUserRoleTest(
+                    2L,
+                    status().isUnauthorized(),
+                    content().string(containsString(""))
+            );
+        }
     }
 
     @Nested

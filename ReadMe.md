@@ -26,9 +26,29 @@
 
 **./mvnw clean verify**
 
-- модульное частичное, например, с указанием класса теста:
+- модульное частичное, например, с указанием класса теста _AuthServiceTest_:
 
-**./mvnw clean verify** **-Dtest="**_AuthServiceTest_**"**
+**./mvnw clean verify** **-Dtest="**_AuthServiceTest_**"** (bash)
+
+**./mvnw clean verify** **-Dtest=**_AuthServiceTest_ (cmd)
+
+- интеграционное с запуском всех групп и кейсов в классе теста _AuthControllerEndpointsTest_:
+
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**"** (bash)
+
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_ (bash)
+
+- интеграционное с запуском всех кейсов в группе _ChangeUserRoleTestCases_ в классе теста _AuthControllerEndpointsTest_:
+
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**"** (bash)
+
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_ (cmd)
+
+- интеграционное с запуском кейса _givenAdminUserAuthenticated_whenChangeUserRole_thenOk_ в группе _ChangeUserRoleTestCases_ в классе теста _AuthControllerEndpointsTest_:
+
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_**"** (bash)
+
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_ (cmd)
 
 ## Отчёты
 

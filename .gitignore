@@ -35,3 +35,4 @@ build/
 ### Custom ###
 *.env
 !sample.env
+!sample-test.env
