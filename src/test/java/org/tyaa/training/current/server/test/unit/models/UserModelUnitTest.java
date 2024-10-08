@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Модульный тест для проверки валидации модели пользователя
  * */
-public class UserModelTest {
+public class UserModelUnitTest {
 
     /**
      * Проверка валидации модели пользователя

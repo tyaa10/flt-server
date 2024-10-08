@@ -22,17 +22,23 @@
 
 ## Тестирование
 
-- модульное полное:
+- полное:
 
 **./mvnw clean verify**
 
-- модульное частичное, например, с указанием класса теста _AuthServiceTest_:
+- с запуском только класса теста _AuthServiceTest_:
 
 **./mvnw clean verify** **-Dtest="**_AuthServiceTest_**"** (bash)
 
 **./mvnw clean verify** **-Dtest=**_AuthServiceTest_ (cmd)
 
-- интеграционное с запуском всех групп и кейсов в классе теста _AuthControllerEndpointsTest_:
+- с запуском только классов тестов с суффиксом _UnitTest_ (модульные тесты):
+
+**./mvnw clean verify** **-Dtest="**_\*UnitTest_**"** (bash)
+
+**./mvnw clean verify** **-Dtest=**_\*UnitTest_ (cmd)
+
+- с запуском всех групп и кейсов в классе теста _AuthControllerEndpointsTest_:
 
 **./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**"** (bash)
 
@@ -52,7 +58,7 @@
 
 ## Отчёты
 
-- по модульным тестам:
+- по тестам:
 
 1. выполнить
 

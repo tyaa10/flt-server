@@ -73,7 +73,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         // запросы к конечной точке "пользователи" методом POST разрешены всем
                         .requestMatchers(HttpMethod.POST, "/api/auth/users/**").permitAll()
                         // запросы к конечной точке "пользователи" методом DELETE разрешены только аутентифицированным
-                        .requestMatchers(HttpMethod.DELETE, "/api/auth/users/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/auth/users/**").hasRole("ADMIN")
                         // запросы к конечной точке "роли" любыми методами разрешены всем
                         .requestMatchers("/api/auth/roles").permitAll()
                         // запросы к конечной точке "роль" методом GET разрешены всем

@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.tyaa.training.current.server.models.ResponseModel;
@@ -25,6 +26,7 @@ import static java.lang.String.format;
 import static org.hamcrest.Matchers.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -203,9 +205,23 @@ public class AuthControllerEndpointsTest {
 
         @Test
         @WithMockUser(username = "admin", roles = { "ADMIN" })
-        public void deleteUserTest() throws Exception {
+        public void givenAdminUserAuthenticated_whenDeleteUserWithCorrectId_thenNoContent() throws Exception {
             final UserModel userModel = UserProvider.getUserModel();
             deleteUserTest(userModel, userModel.getId(), status().isNoContent(), content().string(containsString(format("User #%s Deleted", userModel.getId()))));
+        }
+
+        @Test
+        @WithMockUser(username = "one", roles = { "CUSTOMER" })
+        public void givenCustomerUserAuthenticated_whenDeleteUserWithCorrectId_thenForbidden() throws Exception {
+            final UserModel userModel = UserProvider.getUserModel();
+            deleteUserTest(userModel, userModel.getId(), status().isForbidden(), content().string(containsString("")));
+        }
+
+
+        @Test
+        public void givenNoUser_whenDeleteUserWithCorrectId_thenUnauthorized() throws Exception {
+            final UserModel userModel = UserProvider.getUserModel();
+            deleteUserTest(userModel, userModel.getId(), status().isUnauthorized(), content().string(containsString("")));
         }
     }
 

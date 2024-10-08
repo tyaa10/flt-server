@@ -34,7 +34,7 @@ import org.tyaa.training.current.server.test.dataproviders.RoleProvider;
  * Модульный тест службы AuthService
  * */
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+public class AuthServiceUnitTest {
 
     /*
     * Макеты зависимостей для внедрения в службу AuthService
