@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="shape"></div>
         </div>
         <form id="sign-in_form" action="${contextPath}/login" method="POST">
-            <h3>Login</h3>
+            <h2>Login</h2>
             <label for="username">Username</label>
             <input type="text" placeholder="Login" id="username" name="username">
             <label for="password">Password</label>
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="shape"></div>
         </div>
         <form id="sign-up_form" action="${contextPath}/api/auth/users" method="POST">
-            <h3>Registration</h3>
+            <h2>Registration</h2>
             <label for="username">Username</label>
             <input type="text" placeholder="Login" id="username" name="name" required pattern="[a-z0-9_\\-]{3,16}" title="Username can contain digits from 0 to 9, lowercase letters, _ and - characters, no space, and it must be 3-16 characters long">
             <label for="password">Password</label>
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <span>Change account?</span><span><a id="sign-out" href="#sign-out">Sign Out</a></span>
         </div>
         <form id="content-management_form" action="${contextPath}/api/import/lessons/word-study/zip" method="POST">
-            <h3>Content Management</h3>
+            <h2>Content Management</h2>
             <label for="words-upload">Choose a words-import xlsx file:</label>
             <input type="file" id="words-upload" name="file" required />
             <p id="upload_form_status" class="form_status"></p>

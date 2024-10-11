@@ -1,9 +1,12 @@
-package org.tyaa.training.current.server.test.webdriver;
+package org.tyaa.training.current.server.test.system;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.WebDriver;
-import org.tyaa.training.current.server.test.webdriver.utils.FilePropertiesStore;
-import org.tyaa.training.current.server.test.webdriver.utils.interfaces.IPropertiesStore;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.tyaa.training.current.server.test.system.utils.FilePropertiesStore;
+import org.tyaa.training.current.server.test.system.utils.interfaces.IPropertiesStore;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
@@ -43,12 +46,14 @@ public class WebDriverFactory {
         }
     }
 
-    public synchronized WebDriver getDriver() throws NoSuchMethodException, ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException {
+    public synchronized WebDriver getDriver() /*throws NoSuchMethodException, ClassNotFoundException, InvocationTargetException, InstantiationException, IllegalAccessException*/ {
 
         if (!WebDriverFactory.browsers.containsKey(this.browser)) {
+            System.out.println("WebDriverFactory.browsers:");
+            System.out.println(WebDriverFactory.browsers);
             throw new IllegalArgumentException(String.format("Driver %s Not Found", this.browser));
         }
-        System.out.println("mode = " + System.getProperty("mode"));
+        // System.out.println("mode = " + System.getProperty("mode"));
         System.out.println("os = " + properties.getOs());
         // если для потока выполнения, вызвавшего этот код, ранее был создан объект WebDriver
         if (webDriverThreadLocal.get() != null) {
@@ -56,29 +61,37 @@ public class WebDriverFactory {
             return webDriverThreadLocal.get();
         }
         // иначе - создаём и настраиваем объект WebDriver
-        System.setProperty(
-                String.format("webdriver.%s.driver", this.browser),
+        /* System.setProperty(
+                String.format("system.%s.driver", this.browser),
                 String.format(
                         "src/main/resources/drivers/%sdriver%s",
                         this.browser,
                         properties.getOs().equals("windows") ? ".exe" : ""
                 )
-        );
+        ); */
         String browserClassName = WebDriverFactory.browsers.get(this.browser);
         System.out.println("browserClassName: " + browserClassName);
-        Class<?> browserDriverClass =
+        /* Class<?> browserDriverClass =
                 Class.forName(String.format(
                         "org.openqa.selenium.%s.%sDriver",
                         browserClassName,
                         StringUtils.capitalize(browserClassName))
                 );
-        WebDriver driver = (WebDriver) browserDriverClass.getConstructor().newInstance();
+        WebDriver driver = (WebDriver) browserDriverClass.getConstructor().newInstance(); */
+        WebDriver driver;
+        if (browserClassName.equals("chrome")) {
+            WebDriverManager.chromedriver().setup();
+            driver = new ChromeDriver();
+        } else if (browserClassName.equals("firefox")) {
+            WebDriverManager.firefoxdriver().setup();
+            driver = new FirefoxDriver();
+        } else {
+            throw new IllegalArgumentException(String.format("Driver %s Not Found", this.browser));
+        }
         System.out.println("driver: " + driver);
         driver.manage()
                 .timeouts()
-                .implicitlyWait(
-                        Duration.ofSeconds(properties.getImplicitlyWaitSeconds())
-                );
+                .implicitlyWait(properties.getImplicitlyWaitSeconds());
         webDriverThreadLocal.set(driver);
         return webDriverThreadLocal.get();
     }

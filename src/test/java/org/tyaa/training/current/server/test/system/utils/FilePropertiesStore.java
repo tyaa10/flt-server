@@ -1,9 +1,10 @@
-package org.tyaa.training.current.server.test.webdriver.utils;
+package org.tyaa.training.current.server.test.system.utils;
 
-import org.tyaa.training.current.server.test.webdriver.utils.interfaces.IPropertiesStore;
+import org.tyaa.training.current.server.test.system.utils.interfaces.IPropertiesStore;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * */
 public class FilePropertiesStore implements IPropertiesStore {
 
-    private static final String PROPS_CATALOG = "src/main/resources/";
+    private static final String PROPS_CATALOG = "src/test/resources/system/properties/";
     private static final Set<String> PROPS_FILE_NAMES =
             Set.of("supported-browsers", "main-config", "base-urls");
     private static final Properties properties = new Properties();
@@ -28,7 +29,9 @@ public class FilePropertiesStore implements IPropertiesStore {
             ) {
                 properties.load(fis);
             } catch (IOException ex) {
-                System.err.printf("ERROR: properties file '%s' does not exist", propsFileName);
+                System.err.printf("ERROR: properties file '%s' does not exist\n", propsFileName);
+                System.out.println(ex.getMessage());
+                ex.printStackTrace();
             }
         });
     }
@@ -38,13 +41,13 @@ public class FilePropertiesStore implements IPropertiesStore {
         return (supportedBrowsers != null)
                 ? supportedBrowsers
                 : (supportedBrowsers = properties.entrySet().stream()
-                .filter(entry -> entry.getKey().toString().startsWith("driver."))
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().toString().replace("driver.", ""),
-                        entry -> entry.getValue().toString(),
-                        (o, o2) -> o,
-                        LinkedHashMap::new
-                )));
+                    .filter(entry -> entry.getKey().toString().startsWith("driver."))
+                    .collect(Collectors.toMap(
+                            entry -> entry.getKey().toString().replace("driver.", ""),
+                            entry -> entry.getValue().toString(),
+                            (o, o2) -> o,
+                            LinkedHashMap::new
+                    )));
     }
 
     @Override
@@ -63,14 +66,15 @@ public class FilePropertiesStore implements IPropertiesStore {
 
     @Override
     public String getOs() {
-        return System.getProperty("mode").isBlank()
+        /* return System.getProperty("mode").isBlank()
                 ? properties.getProperty("os")
-                : (System.getProperty("mode").equals("local") ? "windows" : "posix");
+                : (System.getProperty("mode").equals("local") ? "windows" : "posix"); */
+        return properties.getProperty("os");
     }
 
     @Override
-    public Integer getImplicitlyWaitSeconds() {
-        return Integer.parseInt(properties.getProperty("implicitlyWaitSeconds"));
+    public Duration getImplicitlyWaitSeconds() {
+        return Duration.ofSeconds(Integer.parseInt(properties.getProperty("implicitlyWaitSeconds")));
     }
 
     @Override

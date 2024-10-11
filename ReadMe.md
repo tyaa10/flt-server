@@ -24,37 +24,41 @@
 
 - полное:
 
-**./mvnw clean verify**
+**./mvnw clean verify -D"surefire.includeJUnit5Engines=junit-jupiter,cucumber"**
 
 - с запуском только класса теста _AuthServiceTest_:
 
-**./mvnw clean verify** **-Dtest="**_AuthServiceTest_**"** (bash)
+**./mvnw clean verify** **-Dtest="**_AuthServiceTest_**"** **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
-**./mvnw clean verify** **-Dtest=**_AuthServiceTest_ (cmd)
+**./mvnw clean verify** **-Dtest=**_AuthServiceTest_ **-D"surefire.includeJUnit5Engines=junit-jupiter"** (cmd)
 
 - с запуском только классов тестов с суффиксом _UnitTest_ (модульные тесты):
 
-**./mvnw clean verify** **-Dtest="**_\*UnitTest_**"** (bash)
+**./mvnw clean verify** **-Dtest="**_\*UnitTest_**"** **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
-**./mvnw clean verify** **-Dtest=**_\*UnitTest_ (cmd)
+**./mvnw clean verify** **-Dtest=**_\*UnitTest_ **-D"surefire.includeJUnit5Engines=junit-jupiter"** (cmd)
 
 - с запуском всех групп и кейсов в классе теста _AuthControllerEndpointsTest_:
 
-**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**"** (bash)
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**"** **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
-**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_ (bash)
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_ **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
 - интеграционное с запуском всех кейсов в группе _ChangeUserRoleTestCases_ в классе теста _AuthControllerEndpointsTest_:
 
-**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**"** (bash)
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**"** **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
-**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_ (cmd)
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_ **-D"surefire.includeJUnit5Engines=junit-jupiter"** (cmd)
 
 - интеграционное с запуском кейса _givenAdminUserAuthenticated_whenChangeUserRole_thenOk_ в группе _ChangeUserRoleTestCases_ в классе теста _AuthControllerEndpointsTest_:
 
-**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_**"** (bash)
+**./mvnw clean verify** **-Dtest="**_AuthControllerEndpointsTest_**\\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_**"** **-D"surefire.includeJUnit5Engines=junit-jupiter"** (bash)
 
-**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_ (cmd)
+**./mvnw clean verify** **-Dtest=**_AuthControllerEndpointsTest_**\$**_ChangeUserRoleTestCases_**#**_givenAdminUserAuthenticated_whenChangeUserRole_thenOk_ **-D"surefire.includeJUnit5Engines=junit-jupiter"** (cmd)
+
+- системное WEB-панели администрирования (требует предварительно запущенной вручную системы):
+
+**./mvnw clean verify** **-Dtest**=_CucumberTest_ **-D"surefire.includeJUnit5Engines=cucumber"**
 
 ## Отчёты
 
@@ -62,7 +66,7 @@
 
 1. выполнить
 
-**./mvnw surefire-report:report**
+**./mvnw surefire-report:report-only -D"surefire.includeJUnit5Engines=junit-jupiter,cucumber"**
 
 2. открыть для просмотра в браузере
 
@@ -76,4 +80,4 @@ _\<корневой_каталог_проекта\>_**/target/reports/surefire.h
 
 2. открыть для просмотра в браузере
 
-_\<корневой_каталог_проекта\>_**/target/site/index.html**
+_\<корневой_каталог_проекта\>_**/target/site/index.html -D"surefire.includeJUnit5Engines=junit-jupiter,cucumber"**

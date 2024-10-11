@@ -1,4 +1,4 @@
-package org.tyaa.training.current.server.test.webdriver.elements;
+package org.tyaa.training.current.server.test.system.elements;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

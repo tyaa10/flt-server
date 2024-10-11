@@ -1,4 +1,4 @@
-package org.tyaa.training.current.server.test.webdriver;
+package org.tyaa.training.current.server.test.system;
 
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;

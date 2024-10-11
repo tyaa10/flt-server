@@ -1,5 +1,6 @@
-package org.tyaa.training.current.server.test.webdriver.utils.interfaces;
+package org.tyaa.training.current.server.test.system.utils.interfaces;
 
+import java.time.Duration;
 import java.util.Map;
 
 /**
@@ -10,6 +11,6 @@ public interface IPropertiesStore {
     Map<String, String> getSupportedBrowsers();
     Map.Entry<String, String> getDefaultBrowser() throws Exception;
     String getOs();
-    Integer getImplicitlyWaitSeconds();
+    Duration getImplicitlyWaitSeconds();
     String getDevUrl();
 }
